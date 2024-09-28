@@ -1,0 +1,96 @@
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0;
+}
+
+.chat-room {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.chat-header {
+  background-color: #00bfff;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-partner {
+  margin: 0;
+}
+
+.btn-add-members {
+  background-color: white;
+  color: #00bfff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.chat-history {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.message {
+  background-color: white;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  max-width: 70%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.message.sent {
+  background-color: #e0f7fa;
+  margin-left: auto;
+}
+
+.message.received {
+  background-color: #f1f1f1;
+}
+
+.timestamp {
+  font-size: 0.8rem;
+  color: #888;
+  display: block;
+  text-align: right;
+  margin-top: 0.5rem;
+}
+
+.chat-input {
+  background-color: #fff;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.input-field {
+  flex: 1;
+  padding: 1rem;
+  border: none;
+  border-radius: 20px;
+  margin-right: 1rem;
+}
+
+.btn-send {
+  background-color: #00bfff;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

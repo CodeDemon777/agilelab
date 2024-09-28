@@ -1,0 +1,29 @@
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f9fa;
+}
+
+.notifications-page {
+  padding: 2rem;
+}
+
+.notifications-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.notification {
+  background-color: #fff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  animation: slideIn 0.5s ease-in-out;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}

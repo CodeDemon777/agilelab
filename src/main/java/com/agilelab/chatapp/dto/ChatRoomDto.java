@@ -47,3 +47,4 @@ public class ChatRoomDto {
     public String getPartnerUsername() { return partnerUsername; }
     public void setPartnerUsername(String partnerUsername) { this.partnerUsername = partnerUsername; }
 }
+

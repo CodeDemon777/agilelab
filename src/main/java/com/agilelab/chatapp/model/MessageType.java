@@ -8,3 +8,4 @@ public enum MessageType {
     CALL_END,
     IMAGE
 }
+

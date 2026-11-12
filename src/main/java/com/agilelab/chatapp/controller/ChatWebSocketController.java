@@ -7,6 +7,8 @@ import com.agilelab.chatapp.model.User;
 import com.agilelab.chatapp.service.CallService;
 import com.agilelab.chatapp.service.ChatService;
 import com.agilelab.chatapp.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -22,6 +24,8 @@ import java.util.Map;
 
 @Controller
 public class ChatWebSocketController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ChatWebSocketController.class);
 
     private final ChatService chatService;
     private final UserService userService;
@@ -40,10 +44,31 @@ public class ChatWebSocketController {
 
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(@Payload Map<String, Object> payload, Principal principal) {
-        if (principal == null) return;
+        String senderUsername = principal != null ? principal.getName() : null;
+        if (senderUsername == null || senderUsername.isBlank()) {
+            senderUsername = (String) payload.get("senderUsername");
+        }
+        if (senderUsername == null || senderUsername.isBlank()) {
+            senderUsername = (String) payload.get("sender");
+        }
 
-        Long roomId = Long.valueOf(payload.get("roomId").toString());
+        if (senderUsername == null || senderUsername.isBlank()) {
+            logger.warn("WebSocket sendMessage rejected: no sender identified");
+            return;
+        }
+
+        Object roomIdObj = payload.get("roomId");
+        if (roomIdObj == null) {
+            logger.warn("WebSocket sendMessage rejected: missing roomId");
+            return;
+        }
+
+        Long roomId = Long.valueOf(roomIdObj.toString());
         String content = (String) payload.get("content");
+        if (content == null || content.isBlank()) {
+            return;
+        }
+
         String typeStr = (String) payload.getOrDefault("type", "CHAT");
         String fileUrl = (String) payload.get("fileUrl");
 
@@ -52,36 +77,50 @@ public class ChatWebSocketController {
             if (typeStr != null) type = MessageType.valueOf(typeStr);
         } catch (Exception ignored) {}
 
-        MessageDto savedDto = chatService.saveMessage(roomId, principal.getName(), content, type, fileUrl);
-        // Broadcast to everyone in the room topic
+        logger.info("WebSocket chat message from {} to room {}: {}", senderUsername, roomId, content);
+
+        MessageDto savedDto = chatService.saveMessage(roomId, senderUsername, content.trim(), type, fileUrl);
+
+        // 1. Broadcast to specific room topic for active participants
         messagingTemplate.convertAndSend("/topic/room." + roomId, savedDto);
+
+        // 2. Broadcast to global messages topic for live chat list previews & unread updates
+        messagingTemplate.convertAndSend("/topic/messages", savedDto);
     }
 
     @MessageMapping("/chat.typing")
     public void typingIndicator(@Payload Map<String, Object> payload, Principal principal) {
-        if (principal == null) return;
+        String username = principal != null ? principal.getName() : (String) payload.get("username");
+        if (username == null || username.isBlank()) return;
 
-        Long roomId = Long.valueOf(payload.get("roomId").toString());
+        Object roomIdObj = payload.get("roomId");
+        if (roomIdObj == null) return;
+        Long roomId = Long.valueOf(roomIdObj.toString());
+
         boolean isTyping = Boolean.parseBoolean(payload.getOrDefault("isTyping", "false").toString());
 
         messagingTemplate.convertAndSend("/topic/room." + roomId + ".typing", Map.of(
                 "roomId", roomId,
-                "username", principal.getName(),
+                "username", username,
                 "isTyping", isTyping
         ));
     }
 
     @MessageMapping("/call.signal")
     public void handleCallSignal(@Payload CallSignalDto signal, Principal principal) {
-        if (principal == null || signal == null) return;
+        if (signal == null) return;
 
-        signal.setFromUser(principal.getName());
+        if (signal.getFromUser() == null || signal.getFromUser().isBlank()) {
+            if (principal != null) signal.setFromUser(principal.getName());
+        }
 
-        try {
-            User sender = userService.findByUsername(principal.getName());
-            signal.setFromFullName(sender.getFullName());
-            signal.setFromAvatar(sender.getAvatarUrl());
-        } catch (Exception ignored) {}
+        if (signal.getFromUser() != null) {
+            try {
+                User sender = userService.findByUsername(signal.getFromUser());
+                signal.setFromFullName(sender.getFullName());
+                signal.setFromAvatar(sender.getAvatarUrl());
+            } catch (Exception ignored) {}
+        }
 
         String type = signal.getType();
         if ("INVITE".equalsIgnoreCase(type) && signal.getToUser() != null) {
@@ -106,6 +145,7 @@ public class ChatWebSocketController {
         StompHeaderAccessor headers = StompHeaderAccessor.wrap(event.getMessage());
         Principal principal = headers.getUser();
         if (principal != null) {
+            logger.info("WebSocket client connected: {}", principal.getName());
             userService.setOnlineStatus(principal.getName(), true);
             messagingTemplate.convertAndSend("/topic/presence", Map.of(
                     "username", principal.getName(),
@@ -119,6 +159,7 @@ public class ChatWebSocketController {
         StompHeaderAccessor headers = StompHeaderAccessor.wrap(event.getMessage());
         Principal principal = headers.getUser();
         if (principal != null) {
+            logger.info("WebSocket client disconnected: {}", principal.getName());
             userService.setOnlineStatus(principal.getName(), false);
             messagingTemplate.convertAndSend("/topic/presence", Map.of(
                     "username", principal.getName(),
@@ -127,3 +168,4 @@ public class ChatWebSocketController {
         }
     }
 }
+

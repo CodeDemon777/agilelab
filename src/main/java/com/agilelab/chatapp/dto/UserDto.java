@@ -52,3 +52,4 @@ public class UserDto {
     public LocalDateTime getLastSeen() { return lastSeen; }
     public void setLastSeen(LocalDateTime lastSeen) { this.lastSeen = lastSeen; }
 }
+

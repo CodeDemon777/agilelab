@@ -12,13 +12,17 @@ import com.agilelab.chatapp.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@TestPropertySource(properties = {
+    "spring.datasource.url=jdbc:h2:mem:apptestdb;DB_CLOSE_DELAY=-1",
+    "spring.jpa.hibernate.ddl-auto=create-drop"
+})
 class AgileLabApplicationTests {
 
     @Autowired
@@ -93,3 +97,4 @@ class AgileLabApplicationTests {
         assertFalse(rooms.isEmpty());
     }
 }
+

@@ -136,3 +136,4 @@ public class DataInitializer implements CommandLineRunner {
         notificationRepository.save(n3);
     }
 }
+

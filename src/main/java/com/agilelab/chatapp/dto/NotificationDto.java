@@ -64,3 +64,4 @@ public class NotificationDto {
     public String getSenderAvatar() { return senderAvatar; }
     public void setSenderAvatar(String senderAvatar) { this.senderAvatar = senderAvatar; }
 }
+

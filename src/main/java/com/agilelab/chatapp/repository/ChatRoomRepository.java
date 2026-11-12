@@ -22,3 +22,4 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
            "AND EXISTS (SELECT p2 FROM ChatParticipant p2 WHERE p2.chatRoom = r AND p2.user = :user2)")
     Optional<ChatRoom> findDirectRoomBetween(@Param("user1") User user1, @Param("user2") User user2);
 }
+

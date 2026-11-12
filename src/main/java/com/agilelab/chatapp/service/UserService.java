@@ -137,3 +137,4 @@ public class UserService implements UserDetailsService {
         return "https://api.dicebear.com/7.x/bottts/svg?seed=" + name;
     }
 }
+

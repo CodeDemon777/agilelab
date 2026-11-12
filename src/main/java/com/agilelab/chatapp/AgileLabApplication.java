@@ -10,3 +10,4 @@ public class AgileLabApplication {
         SpringApplication.run(AgileLabApplication.class, args);
     }
 }
+

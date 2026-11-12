@@ -8,6 +8,7 @@ const ChatApp = {
     roomSubscription: null,
     typingSubscription: null,
     typingTimeout: null,
+    displayedMessageIds: new Set(),
 
     init: function() {
         this.bindEvents();
@@ -22,6 +23,15 @@ const ChatApp = {
                 this.setupActiveRoom();
             });
         }
+
+        // Listen for global real-time chat messages
+        window.addEventListener('newChatMessage', (e) => {
+            const message = e.detail;
+            this.updateChatItemPreview(message);
+            if (this.currentRoomId && message.roomId == this.currentRoomId) {
+                this.appendMessage(message);
+            }
+        });
 
         // Check URL parameter for room
         const urlParams = new URLSearchParams(window.location.search);
@@ -78,6 +88,7 @@ const ChatApp = {
     selectRoom: async function(roomId) {
         if (!roomId) return;
         this.currentRoomId = roomId;
+        this.displayedMessageIds.clear();
 
         // Highlight active item
         document.querySelectorAll('.chat-item').forEach(el => {
@@ -189,12 +200,24 @@ const ChatApp = {
         const historyContainer = document.getElementById('chat-history');
         if (!historyContainer) return;
 
+        // Prevent duplicate rendering
+        if (msg.id && this.displayedMessageIds.has(msg.id)) {
+            return;
+        }
+        if (msg.id) {
+            this.displayedMessageIds.add(msg.id);
+        }
+
         // Remove empty state message if present
         if (historyContainer.children.length === 1 && historyContainer.children[0].innerText.includes('No messages yet')) {
             historyContainer.innerHTML = '';
         }
 
-        const isMe = window.App.currentUser && (msg.senderUsername === window.App.currentUser.username);
+        const myUsername = (window.App && window.App.currentUser && window.App.currentUser.username)
+            ? window.App.currentUser.username.toLowerCase()
+            : '';
+        const sender = (msg.senderUsername || '').toLowerCase();
+        const isMe = myUsername && (sender === myUsername);
         const msgDiv = document.createElement('div');
 
         if (msg.type === 'JOIN' || msg.type === 'LEAVE' || msg.type === 'SYSTEM') {
@@ -226,10 +249,13 @@ const ChatApp = {
         input.value = '';
         this.notifyTyping(false);
 
+        const currentUsername = (window.App && window.App.currentUser) ? window.App.currentUser.username : null;
+
         if (this.stompClient && window.App.connected) {
             this.stompClient.send('/app/chat.sendMessage', {}, JSON.stringify({
                 roomId: this.currentRoomId,
                 content: text,
+                senderUsername: currentUsername,
                 type: 'CHAT'
             }));
         } else {
@@ -237,7 +263,10 @@ const ChatApp = {
             fetch(`/api/chats/${this.currentRoomId}/message`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content: text })
+                body: JSON.stringify({
+                    content: text,
+                    senderUsername: currentUsername
+                })
             }).then(r => r.json()).then(msg => {
                 this.appendMessage(msg);
                 this.updateChatItemPreview(msg);
@@ -250,8 +279,11 @@ const ChatApp = {
 
         if (this.typingTimeout) clearTimeout(this.typingTimeout);
 
+        const currentUsername = (window.App && window.App.currentUser) ? window.App.currentUser.username : null;
+
         this.stompClient.send('/app/chat.typing', {}, JSON.stringify({
             roomId: this.currentRoomId,
+            username: currentUsername,
             isTyping: isTyping
         }));
 
@@ -496,3 +528,4 @@ async function submitAddMembers() {
 document.addEventListener('DOMContentLoaded', () => {
     ChatApp.init();
 });
+

@@ -12,7 +12,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        // Register WebSocket endpoint with SockJS fallback support
+        // Pure Native WebSocket endpoint (ws://.../ws)
+        registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns("*");
+
+        // SockJS fallback endpoint (http://.../ws)
         registry.addEndpoint("/ws")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
@@ -28,3 +32,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         config.setUserDestinationPrefix("/user");
     }
 }
+

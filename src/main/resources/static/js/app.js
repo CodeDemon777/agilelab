@@ -52,14 +52,43 @@ const App = {
                 this.handlePresenceUpdate(presence);
             });
 
+            // 4. Listen for real-time messages across all rooms (for instant sidebar preview & notifications)
+            this.stompClient.subscribe('/topic/messages', (msg) => {
+                const chatMsg = JSON.parse(msg.body);
+                window.dispatchEvent(new CustomEvent('newChatMessage', { detail: chatMsg }));
+            });
+
+            this.updateWsBadge(true);
+
             // Trigger event for page-specific listeners (e.g. Chat page)
             window.dispatchEvent(new CustomEvent('stompConnected', { detail: { stompClient: this.stompClient } }));
         }, (err) => {
             console.error('STOMP connection error:', err);
             this.connected = false;
-            // Retry after 5 seconds
-            setTimeout(() => this.initWebSocket(), 5000);
+            this.updateWsBadge(false);
+            window.dispatchEvent(new CustomEvent('stompDisconnected'));
+            // Retry after 3 seconds
+            setTimeout(() => this.initWebSocket(), 3000);
         });
+    },
+
+    updateWsBadge: function(isConnected) {
+        const badge = document.getElementById('ws-status-badge');
+        if (badge) {
+            if (isConnected) {
+                badge.style.display = 'inline-flex';
+                badge.style.background = 'rgba(46, 204, 113, 0.2)';
+                badge.style.color = '#2ecc71';
+                badge.style.borderColor = '#2ecc71';
+                badge.innerHTML = '<span style="width:7px; height:7px; border-radius:50%; background:#2ecc71; display:inline-block; animation: pulseRing 1.8s infinite;"></span> Real-time Live';
+            } else {
+                badge.style.display = 'inline-flex';
+                badge.style.background = 'rgba(231, 76, 60, 0.2)';
+                badge.style.color = '#e74c3c';
+                badge.style.borderColor = '#e74c3c';
+                badge.innerHTML = '<span style="width:7px; height:7px; border-radius:50%; background:#e74c3c; display:inline-block;"></span> Reconnecting...';
+            }
+        }
     },
 
     handleIncomingNotification: function(notif) {
@@ -191,3 +220,4 @@ const App = {
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
 });
+

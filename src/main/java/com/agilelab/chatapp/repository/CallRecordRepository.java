@@ -17,3 +17,4 @@ public interface CallRecordRepository extends JpaRepository<CallRecord, Long> {
     @Query("SELECT c FROM CallRecord c WHERE c.caller = :user OR c.receiver = :user ORDER BY c.startedAt DESC")
     List<CallRecord> findRecentCallsForUser(@Param("user") User user);
 }
+

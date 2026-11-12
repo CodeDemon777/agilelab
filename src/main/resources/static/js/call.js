@@ -325,3 +325,4 @@ const CallManager = {
 document.addEventListener('DOMContentLoaded', () => {
     CallManager.init();
 });
+

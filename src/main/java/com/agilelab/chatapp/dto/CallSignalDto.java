@@ -42,3 +42,4 @@ public class CallSignalDto {
 
     private String avatar(String a) { return a != null ? a : "/images/default-avatar.svg"; }
 }
+

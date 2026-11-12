@@ -18,3 +18,4 @@ public class CreateGroupRequest {
     public List<String> getMemberUsernames() { return memberUsernames; }
     public void setMemberUsernames(List<String> memberUsernames) { this.memberUsernames = memberUsernames; }
 }
+

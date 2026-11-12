@@ -292,8 +292,14 @@
           <div class="chat-header-left">
             <img id="chat-partner-avatar" src="/images/default-avatar.svg" class="chat-avatar" style="width: 40px; height: 40px;">
             <div>
-              <h2 id="chat-partner-name" class="chat-partner" style="font-size: 1.2rem; font-weight: 700;">Select a Chat</h2>
-              <div id="chat-partner-status" style="font-size: 0.8rem; opacity: 0.9;">Connecting...</div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <h2 id="chat-partner-name" class="chat-partner" style="font-size: 1.2rem; font-weight: 700; margin: 0;">Select a Chat</h2>
+                <span id="ws-status-badge" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 12px; border: 1px solid #2ecc71; color: #2ecc71; background: rgba(46, 204, 113, 0.15); display: inline-flex; align-items: center; gap: 5px;">
+                  <span style="width:6px; height:6px; border-radius:50%; background:#2ecc71;"></span>
+                  WebSocket Live
+                </span>
+              </div>
+              <div id="chat-partner-status" style="font-size: 0.8rem; opacity: 0.9; margin-top: 2px;">Connecting...</div>
             </div>
           </div>
 

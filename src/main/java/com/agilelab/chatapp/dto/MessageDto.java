@@ -2,6 +2,7 @@ package com.agilelab.chatapp.dto;
 
 import com.agilelab.chatapp.model.ChatMessage;
 import com.agilelab.chatapp.model.MessageType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -14,6 +15,8 @@ public class MessageDto {
     private String content;
     private MessageType type;
     private String timestamp;
+
+    @JsonIgnore
     private LocalDateTime rawTimestamp;
     private String fileUrl;
 
@@ -70,3 +73,4 @@ public class MessageDto {
     public String getFileUrl() { return fileUrl; }
     public void setFileUrl(String fileUrl) { this.fileUrl = fileUrl; }
 }
+

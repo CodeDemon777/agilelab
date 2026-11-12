@@ -6,3 +6,4 @@ public enum NotificationType {
     GROUP_INVITE,
     SYSTEM
 }
+

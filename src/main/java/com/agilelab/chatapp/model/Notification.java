@@ -124,3 +124,4 @@ public class Notification {
         this.createdAt = createdAt;
     }
 }
+

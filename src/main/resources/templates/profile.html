@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${profileUser.fullName + ' - Profile | AgileLab'}">User Profile</title>
+  <link rel="stylesheet" th:href="@{/css/ProfilePage.css}">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <style>
+    body {
+      flex-direction: column;
+      justify-content: flex-start;
+      height: 100vh;
+      background-color: #f0f4f8;
+    }
+    .profile-card {
+      max-width: 440px;
+      width: 90%;
+      margin-top: 5vh;
+      border: 1px solid var(--border-color);
+    }
+    .profile-img-wrap {
+      position: relative;
+      display: inline-block;
+    }
+    .avatar-option {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .avatar-option:hover, .avatar-option.selected {
+      border-color: #00bfff;
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <div th:replace="~{fragments/navbar :: navbar('profile')}"></div>
+
+  <div class="profile-page">
+    <div class="profile-card">
+      <div class="profile-img-wrap">
+        <img id="display-profile-img" th:src="${profileUser.avatarUrl}" alt="Profile" class="profile-img" style="object-fit:cover;">
+        <span class="presence-dot" style="width:16px; height:16px; bottom:14px; right:14px;"
+              th:classappend="${profileUser.online} ? 'online' : 'offline'"
+              th:data-user-presence="${profileUser.username}"></span>
+      </div>
+
+      <h1 class="user-name" id="display-user-name" th:text="${profileUser.fullName}">John Doe</h1>
+      <p style="margin: 0 0 0.5rem 0; color: #94a3b8; font-size: 0.9rem;" th:text="'@' + ${profileUser.username}">@username</p>
+      <p class="user-status" id="display-user-status" th:text="'&ldquo;' + ${profileUser.statusQuote} + '&rdquo;'">"Living the dream"</p>
+
+      <!-- If viewing own profile -->
+      <div th:if="${isSelf}">
+        <button class="btn-edit-profile" onclick="openEditProfileModal()">Edit Profile</button>
+      </div>
+
+      <!-- If viewing someone else's profile -->
+      <div th:if="${!isSelf}" style="display: flex; gap: 0.75rem; justify-content: center;">
+        <button class="btn-edit-profile" style="background-color: #00bfff;"
+                id="btn-profile-send-msg"
+                th:data-target-username="${profileUser.username}"
+                onclick="startDirectChat(this.getAttribute('data-target-username'))">
+          💬 Send Message
+        </button>
+        <button class="btn-edit-profile"
+                id="btn-profile-call"
+                th:data-target-username="${profileUser.username}"
+                onclick="startProfileCall(this.getAttribute('data-target-username'))">
+          📹 Video Call
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <div id="edit-profile-modal" class="modal-overlay" th:if="${isSelf}">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Profile</h3>
+        <button class="modal-close-btn" onclick="closeEditProfileModal()">&times;</button>
+      </div>
+
+      <form id="edit-profile-form" onsubmit="saveProfileChanges(event)">
+        <label style="font-weight: 600; font-size: 0.85rem; color: #475569; display:block; margin-bottom: 4px;">Full Name</label>
+        <input type="text" id="edit-fullname" class="input-field" style="margin-top:0;" th:value="${profileUser.fullName}" required>
+
+        <label style="font-weight: 600; font-size: 0.85rem; color: #475569; display:block; margin-bottom: 4px;">Email</label>
+        <input type="email" id="edit-email" class="input-field" style="margin-top:0;" th:value="${profileUser.email}" required>
+
+        <label style="font-weight: 600; font-size: 0.85rem; color: #475569; display:block; margin-bottom: 4px;">Status Quote</label>
+        <input type="text" id="edit-status" class="input-field" style="margin-top:0;" th:value="${profileUser.statusQuote}" placeholder="e.g. Living the dream">
+
+        <label style="font-weight: 600; font-size: 0.85rem; color: #475569; display:block; margin-bottom: 6px;">Choose Avatar</label>
+        <div style="display: flex; gap: 10px; margin-bottom: 1rem; justify-content: center;">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=JohnDoe" class="avatar-option" onclick="selectAvatar(this.src)">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Alice" class="avatar-option" onclick="selectAvatar(this.src)">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Bob" class="avatar-option" onclick="selectAvatar(this.src)">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Emma" class="avatar-option" onclick="selectAvatar(this.src)">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Rocket" class="avatar-option" onclick="selectAvatar(this.src)">
+        </div>
+        <input type="hidden" id="edit-avatar-url" th:value="${profileUser.avatarUrl}">
+
+        <button type="submit" class="btn-submit" style="width: 100%; margin-top: 0.5rem; background-color: #00bfff;">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script th:src="@{/js/sockjs.min.js}"></script>
+  <script th:src="@{/js/stomp.min.js}"></script>
+  <script th:src="@{/js/app.js}"></script>
+
+  <script th:if="${isSelf}">
+    function openEditProfileModal() {
+      document.getElementById('edit-profile-modal').classList.add('active');
+    }
+
+    function closeEditProfileModal() {
+      document.getElementById('edit-profile-modal').classList.remove('active');
+    }
+
+    function selectAvatar(src) {
+      document.getElementById('edit-avatar-url').value = src;
+      document.querySelectorAll('.avatar-option').forEach(el => {
+        if (el.src === src) el.classList.add('selected');
+        else el.classList.remove('selected');
+      });
+    }
+
+    async function saveProfileChanges(e) {
+      e.preventDefault();
+      const payload = {
+        fullName: document.getElementById('edit-fullname').value.trim(),
+        email: document.getElementById('edit-email').value.trim(),
+        statusQuote: document.getElementById('edit-status').value.trim(),
+        avatarUrl: document.getElementById('edit-avatar-url').value.trim()
+      };
+
+      try {
+        const resp = await fetch('/api/users/profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await resp.json();
+        if (resp.ok && result.success) {
+          document.getElementById('display-user-name').innerText = payload.fullName;
+          document.getElementById('display-user-status').innerText = `"${payload.statusQuote}"`;
+          if (payload.avatarUrl) {
+            document.getElementById('display-profile-img').src = payload.avatarUrl;
+          }
+          closeEditProfileModal();
+          App.showToast('Profile updated successfully!');
+        } else {
+          alert(result.message || 'Error updating profile');
+        }
+      } catch (err) {
+        console.error('Failed to save profile changes', err);
+      }
+    }
+  </script>
+
+  <script th:if="${!isSelf}">
+    function startProfileCall(username) {
+      const roomId = 'direct-' + username + '-' + Date.now();
+      window.location.href = `/call/${roomId}?target=${encodeURIComponent(username)}&type=VIDEO`;
+    }
+
+    async function startDirectChat(username) {
+      try {
+        const resp = await fetch('/api/chats/direct', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: username })
+        });
+        if (resp.ok) {
+          const room = await resp.json();
+          window.location.href = `/chats?room=${room.id}`;
+        }
+      } catch (e) {
+        console.error('Error starting chat', e);
+      }
+    }
+  </script>
+</body>
+</html>

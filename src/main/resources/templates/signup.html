@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - AgileLab</title>
+  <link rel="stylesheet" th:href="@{/css/LogIn.css}">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <style>
+    .alert-msg {
+      padding: 0.75rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    .alert-danger {
+      background-color: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-page" style="max-width: 440px; width: 90%;">
+    <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🚀</div>
+    <h1 class="form-title" style="margin-top:0;">Sign Up</h1>
+
+    <div th:if="${errorMessage != null}" class="alert-msg alert-danger" th:text="${errorMessage}"></div>
+
+    <form class="login-signup-form" th:action="@{/signup}" method="post">
+      <input type="text" name="fullName" placeholder="Full Name (e.g. John Doe)" class="input-field" />
+      <input type="text" name="username" placeholder="Username (letters, numbers)" class="input-field" required minlength="3" />
+      <input type="email" name="email" placeholder="Email Address" class="input-field" required />
+      <input type="password" name="password" placeholder="Password (min 6 characters)" class="input-field" required minlength="6" />
+      <button type="submit" class="btn-submit" style="width: 100%; margin-top: 0.5rem; background-color: #00bfff;">Create Account</button>
+    </form>
+
+    <p class="alternate-option">Already have an account? <a th:href="@{/login}">Log In</a></p>
+  </div>
+</body>
+</html>

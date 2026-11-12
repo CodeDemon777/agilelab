@@ -1,0 +1,45 @@
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f8ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.call-page {
+  text-align: center;
+}
+
+.call-controls {
+  margin-bottom: 2rem;
+}
+
+.btn-call {
+  padding: 1rem 2rem;
+  margin: 0 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.video-call {
+  background-color: #ff6347;
+  color: white;
+}
+
+.voice-call {
+  background-color: #00bfff;
+  color: white;
+}
+
+.btn-call:hover {
+  transform: scale(1.1);
+}
+
+.call-status p {
+  font-size: 1.2rem;
+  color: #666;
+}

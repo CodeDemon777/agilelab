@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head></head>
+<body>
+<nav th:fragment="navbar(activeTab)" class="app-navbar">
+    <a href="/chats" class="brand-container">
+        <div class="brand-logo">💬</div>
+        <span class="brand-name">AgileLab</span>
+    </a>
+
+    <ul class="nav-links">
+        <li>
+            <a href="/chats" class="nav-link" th:classappend="${activeTab == 'chats'} ? 'active' : ''">
+                <span>💬 Chats</span>
+            </a>
+        </li>
+        <li>
+            <a href="/notifications" class="nav-link" th:classappend="${activeTab == 'notifications'} ? 'active' : ''">
+                <span>🔔 Notifications</span>
+                <span id="navbar-notif-badge" class="nav-badge"
+                      th:style="${unreadCount != null and unreadCount > 0} ? 'display:inline-block;' : 'display:none;'"
+                      th:text="${unreadCount != null ? unreadCount : 0}">0</span>
+            </a>
+        </li>
+    </ul>
+
+    <div style="display:flex; align-items:center; gap: 1rem;" th:if="${currentUser != null}">
+        <a href="/profile" class="user-nav-profile" title="View Profile">
+            <div class="nav-avatar-wrap">
+                <img th:src="${currentUser.avatarUrl}" class="nav-avatar" alt="Avatar">
+                <span class="presence-dot online" th:data-user-presence="${currentUser.username}"></span>
+            </div>
+            <span style="font-weight:600; font-size:0.92rem;" th:text="${currentUser.fullName}">User</span>
+        </a>
+
+        <form th:action="@{/logout}" method="post" style="margin:0;">
+            <button type="submit" class="nav-logout-btn">Log Out</button>
+        </form>
+    </div>
+</nav>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video &amp; Voice Call - AgileLab</title>
+  <link rel="stylesheet" th:href="@{/css/CallPage.css}">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <style>
+    body {
+      flex-direction: column;
+      justify-content: flex-start;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #0f172a;
+    }
+    .video-viewport {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 140px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #020617;
+    }
+    #remote-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background-color: #1e293b;
+    }
+    #local-video {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      width: 220px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 3px solid #00bfff;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      background-color: #334155;
+      z-index: 20;
+    }
+    .call-overlay-header {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      z-index: 20;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+    .call-controls-bar {
+      height: 75px;
+      background: #0f172a;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 0 1rem;
+    }
+    .btn-call-ctrl {
+      padding: 0.75rem 1.4rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: transform 0.2s, background-color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: white;
+      background-color: #00bfff;
+    }
+    .btn-call-ctrl:hover {
+      transform: scale(1.05);
+    }
+    .btn-call-ctrl.end-call {
+      background-color: #ff6347;
+    }
+    .btn-call-ctrl.secondary {
+      background-color: #334155;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navbar -->
+  <div th:replace="~{fragments/navbar :: navbar('call')}"></div>
+
+  <!-- Video Viewport -->
+  <div class="video-viewport">
+    <div class="call-overlay-header">
+      <h2 id="call-target-title" style="margin: 0; font-size: 1.4rem;" th:text="${'Call with ' + (targetUsername != null ? targetUsername : 'Peer')}">Call</h2>
+      <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+        <span class="presence-dot online"></span>
+        <span id="call-duration-timer" style="font-size: 0.95rem; font-family: monospace;">00:00</span>
+      </div>
+    </div>
+
+    <!-- Main Remote Video (or Voice placeholder) -->
+    <video id="remote-video" autoplay playsinline></video>
+
+    <!-- Local Self View (Picture-in-Picture) -->
+    <video id="local-video" autoplay playsinline muted></video>
+  </div>
+
+  <!-- Call Controls Bottom Bar -->
+  <div class="call-controls-bar">
+    <button id="btn-toggle-mic" class="btn-call-ctrl">Mute Mic</button>
+    <button id="btn-toggle-cam" class="btn-call-ctrl" th:style="${callType == 'VIDEO'} ? 'display:inline-flex;' : 'display:none;'">Turn Cam Off</button>
+    <button id="btn-screen-share" class="btn-call-ctrl secondary">Screen Share</button>
+    <button id="btn-end-call" class="btn-call-ctrl end-call">End Call</button>
+  </div>
+
+  <!-- Call Status Box -->
+  <div class="call-status" style="position: absolute; bottom: 85px; left: 50%; transform: translateX(-50%); z-index: 25; background: rgba(0,0,0,0.65); padding: 6px 18px; border-radius: 20px; color: white;">
+    <p id="call-status-text" style="margin: 0; font-size: 0.9rem; color: #e2e8f0;">Waiting for the other user to join...</p>
+  </div>
+
+  <!-- Scripts -->
+  <script th:src="@{/js/sockjs.min.js}"></script>
+  <script th:src="@{/js/stomp.min.js}"></script>
+  <script th:src="@{/js/app.js}"></script>
+  <script th:src="@{/js/call.js}"></script>
+</body>
+</html>

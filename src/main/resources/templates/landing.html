@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgileLab - Connect. Chat. Collaborate.</title>
+  <link rel="stylesheet" th:href="@{/css/LandingPage.css}">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+  <div class="landing-page">
+    <header class="hero-section">
+      <div style="margin-bottom: 1.5rem;">
+        <span style="font-size: 3.5rem;">💬</span>
+      </div>
+      <h1 class="tagline">Connect. Chat. Collaborate.</h1>
+      <p class="overview">Experience seamless communication with our agile chat application, powered by real-time messaging, WebSockets &amp; WebRTC audio/video calls.</p>
+
+      <div class="cta-buttons">
+        <th:block th:if="${currentUser == null}">
+          <a th:href="@{/signup}" class="btn btn-signup">Sign Up</a>
+          <a th:href="@{/login}" class="btn btn-login">Log In</a>
+        </th:block>
+        <th:block th:if="${currentUser != null}">
+          <a th:href="@{/chats}" class="btn btn-signup" style="background-color: #2ecc71;">Open Chats</a>
+          <a th:href="@{/profile}" class="btn btn-login" style="background-color: #00bfff;">My Profile</a>
+        </th:block>
+      </div>
+
+      <div style="margin-top: 3.5rem; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+        <div style="background: white; padding: 1.25rem 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); max-width: 250px;">
+          <h3 style="margin: 0 0 8px 0; color: #00bfff;">⚡ Instant Chat</h3>
+          <p style="margin: 0; color: #666; font-size: 0.9rem;">Real-time STOMP WebSockets with instant delivery and typing indicators.</p>
+        </div>
+        <div style="background: white; padding: 1.25rem 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); max-width: 250px;">
+          <h3 style="margin: 0 0 8px 0; color: #ff6347;">📹 Video &amp; Voice</h3>
+          <p style="margin: 0; color: #666; font-size: 0.9rem;">High-fidelity peer-to-peer WebRTC calls with screen share capabilities.</p>
+        </div>
+        <div style="background: white; padding: 1.25rem 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); max-width: 250px;">
+          <h3 style="margin: 0 0 8px 0; color: #2ecc71;">👥 Teams &amp; Groups</h3>
+          <p style="margin: 0; color: #666; font-size: 0.9rem;">Create group chats, invite teammates, and manage project collaboration.</p>
+        </div>
+      </div>
+    </header>
+
+    <footer>
+      <ul class="footer-links">
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">FAQs</a></li>
+      </ul>
+      <p style="color: #999; font-size: 0.85rem; margin-top: 0.5rem;">AgileLab Spring Boot Chat Application &copy; 2026</p>
+    </footer>
+  </div>
+</body>
+</html>

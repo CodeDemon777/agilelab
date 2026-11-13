@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Workspace - AgileLab</title>
+  <link rel="stylesheet" href="/css/app.css">
+  <style>
+    .ai-container {
+      max-width: 1240px;
+      margin: 1.5rem auto 3rem;
+      padding: 0 1.5rem;
+    }
+    .ai-header-card {
+      background: linear-gradient(135deg, #09172c 0%, #112a4d 60%, #1e3a6a 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 2rem 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(0, 191, 255, 0.25);
+    }
+    .ai-header-title {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin: 0 0 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .ai-sparkle-badge {
+      background: linear-gradient(135deg, #00bfff, #38ef7d);
+      color: #051426;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.75rem;
+    }
+    .kpi-card {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .kpi-card .kpi-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #93c5fd;
+      font-weight: 600;
+    }
+    .kpi-card .kpi-val {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+    .ai-tabs-nav {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 2rem;
+      overflow-x: auto;
+    }
+    .ai-tab-btn {
+      background: none;
+      border: none;
+      outline: none;
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: #64748b;
+      padding: 0.85rem 1.5rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .ai-tab-btn:hover { color: #0284c7; }
+    .ai-tab-btn.active {
+      color: #0284c7;
+      border-bottom-color: #0284c7;
+      background: rgba(2, 132, 199, 0.05);
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+    .ai-tab-pane { display: none; }
+    .ai-tab-pane.active { display: block; }
+    .content-box {
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .rag-chat-wrapper {
+      display: flex;
+      flex-direction: column;
+      height: 600px;
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+    }
+    .rag-chat-header {
+      padding: 1rem 1.5rem;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .rag-chat-stream {
+      flex: 1;
+      padding: 1.5rem;
+      overflow-y: auto;
+      background: #fdfefe;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .rag-msg { display: flex; gap: 1rem; max-width: 85%; }
+    .rag-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+    .rag-msg.assistant { align-self: flex-start; }
+    .rag-bubble {
+      padding: 1rem 1.25rem;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .rag-msg.user .rag-bubble {
+      background: #00bfff;
+      color: white;
+      border-bottom-right-radius: 3px;
+    }
+    .rag-msg.assistant .rag-bubble {
+      background: #f1f5f9;
+      color: #1e293b;
+      border: 1px solid #e2e8f0;
+      border-bottom-left-radius: 3px;
+    }
+    .rag-citations-box {
+      margin-top: 0.75rem;
+      padding: 0.65rem 0.85rem;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      color: #475569;
+    }
+    .rag-prompt-chips {
+      padding: 0.75rem 1.5rem;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+    }
+    .prompt-chip {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      color: #334155;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .prompt-chip:hover { background: #e0f2fe; color: #0369a1; }
+    .rag-input-box {
+      padding: 1rem 1.5rem;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      gap: 0.75rem;
+    }
+    .action-hub-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .status-filter-pills {
+      display: flex;
+      gap: 0.4rem;
+      background: #e2e8f0;
+      padding: 4px;
+      border-radius: 10px;
+    }
+    .filter-pill {
+      border: none;
+      background: transparent;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+    }
+    .filter-pill.active {
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.25rem;
+    }
+    .action-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+    .action-card.completed {
+      opacity: 0.75;
+      background: #f8fafc;
+    }
+    .action-card.completed .action-title {
+      text-decoration: line-through;
+      color: #64748b;
+    }
+    .action-card-header { display: flex; align-items: flex-start; gap: 0.75rem; }
+    .action-checkbox { margin-top: 3px; width: 18px; height: 18px; cursor: pointer; }
+    .action-title { font-size: 1.05rem; font-weight: 700; color: #0f172a; margin: 0 0 6px; }
+    .action-desc { font-size: 0.88rem; color: #475569; margin: 0 0 1rem; }
+    .action-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 0.85rem;
+      margin-top: 0.85rem;
+    }
+    .priority-badge { font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+    .priority-badge.URGENT { background: #fee2e2; color: #b91c1c; }
+    .priority-badge.HIGH { background: #ffedd5; color: #c2410c; }
+    .priority-badge.MEDIUM { background: #e0f2fe; color: #0369a1; }
+    .priority-badge.LOW { background: #f1f5f9; color: #475569; }
+    .assignee-chip { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 600; }
+    .assignee-avatar { width: 24px; height: 24px; border-radius: 50%; background: #e2e8f0; }
+
+    .meeting-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .meeting-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .meeting-badge {
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+    .ai-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    .ai-modal-overlay.open { display: flex; }
+    .ai-modal-box {
+      background: #ffffff;
+      border-radius: 16px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+    .ai-modal-header {
+      padding: 1.25rem 1.5rem;
+      background: #0f172a;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ai-modal-body { padding: 1.5rem; max-height: 75vh; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <!-- Navigation Header -->
+  <nav class="app-navbar">
+    <a href="/index.html" class="brand-container">
+      <div class="brand-logo">💬</div>
+      <span class="brand-name">AgileLab</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/chats.html" class="nav-link"><span>💬 Chats</span></a></li>
+      <li><a href="/ai-workspace.html" class="nav-link ai-nav-pill active"><span>✨ AI Workspace</span></a></li>
+      <li><a href="/notifications.html" class="nav-link"><span>🔔 Notifications</span><span id="navbar-notif-badge" class="nav-badge" style="display:none;">0</span></a></li>
+    </ul>
+    <div style="display:flex; align-items:center; gap: 1rem;">
+      <div id="navbar-user-profile" style="display:none; align-items:center; gap: 0.6rem;">
+        <a href="/profile.html" class="user-nav-profile">
+          <img id="navbar-user-avatar" src="/images/default-avatar.svg" class="nav-avatar" style="width:30px; height:30px; border-radius:50%;">
+          <span id="navbar-user-name" style="font-weight:600; font-size:0.9rem;">User</span>
+        </a>
+        <button onclick="App.logout()" class="nav-logout-btn">Log Out</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="ai-container">
+    <!-- Header Banner -->
+    <div class="ai-header-card">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h1 class="ai-header-title">
+            <span>✨ AgileLab Smart AI Workspace</span>
+            <span class="ai-sparkle-badge">Spring AI + RAG</span>
+          </h1>
+          <p style="color: #94a3b8; max-width: 720px; margin: 0; line-height: 1.5;">
+            Autonomous team collaboration assistant grounded in conversation history, instant meeting minutes transcription, and intelligent action item extraction.
+          </p>
+        </div>
+        <div>
+          <button class="btn-primary" style="background:#00bfff; font-weight:700;" onclick="openNewActionItemModal()">+ Add Action Item</button>
+        </div>
+      </div>
+
+      <!-- KPI Metrics -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-label">Messages Grounded</span>
+          <span id="kpi-msgs-val" class="kpi-val">12</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Action Items Active</span>
+          <span id="kpi-tasks-val" class="kpi-val">3</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Task Completion Rate</span>
+          <span id="kpi-rate-val" class="kpi-val">33.3%</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Meeting Summaries</span>
+          <span id="kpi-notes-val" class="kpi-val">1</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Workspace Tabs -->
+    <div class="ai-tabs-nav">
+      <button class="ai-tab-btn active" data-tab="tab-assistant" onclick="switchAiTab('tab-assistant')">
+        <span>🤖</span> RAG Chat Assistant
+      </button>
+      <button class="ai-tab-btn" data-tab="tab-action-items" onclick="switchAiTab('tab-action-items')">
+        <span>📋</span> Action Items Kanban (<span id="action-items-count">0</span>)
+      </button>
+      <button class="ai-tab-btn" data-tab="tab-meetings" onclick="switchAiTab('tab-meetings')">
+        <span>🎙️</span> Meeting Minutes &amp; Transcripts
+      </button>
+      <button class="ai-tab-btn" data-tab="tab-translator" onclick="switchAiTab('tab-translator')">
+        <span>🌐</span> Multilingual AI Translation
+      </button>
+      <button class="ai-tab-btn" data-tab="tab-insights" onclick="switchAiTab('tab-insights')">
+        <span>📊</span> Team Velocity &amp; Analytics
+      </button>
+    </div>
+
+    <!-- TAB 1: RAG Assistant -->
+    <div id="tab-assistant" class="ai-tab-pane active">
+      <div class="rag-chat-wrapper">
+        <div class="rag-chat-header">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:36px; height:36px; border-radius:50%; background:#00bfff; display:flex; align-items:center; justify-content:center; color:white; font-size:1.2rem;">🤖</div>
+            <div>
+              <h3 style="margin:0; font-size:1.05rem; font-weight:700; color:#0f172a;">AgileLab Assistant (RAG Pipeline)</h3>
+              <span style="font-size:0.75rem; color:#10b981; font-weight:600;">● Grounded in Real-Time Workspace History</span>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <label style="font-size:0.85rem; font-weight:600; color:#475569;">Scope Room:</label>
+            <select id="rag-room-scope" class="input-field" style="margin:0; padding:6px 12px; font-size:0.85rem; width:auto;">
+              <option value="">All Chat History (Global RAG)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="rag-chat-stream" class="rag-chat-stream">
+          <div class="rag-msg assistant">
+            <div class="rag-bubble">
+              👋 <strong>Hi, I am your AgileLab Smart AI Assistant!</strong><br>
+              I use <strong>Retrieval-Augmented Generation (RAG)</strong> to answer questions grounded directly in your team's messages, sprint decisions, and meeting notes.
+              <br><br>
+              Try asking:
+              <ul style="margin:6px 0 0; padding-left:1.2rem;">
+                <li>"What decisions were made about the sprint review?"</li>
+                <li>"Who is assigned to the Docker container task?"</li>
+                <li>"What is the team meeting time?"</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="rag-prompt-chips">
+          <span class="prompt-chip" onclick="askQuickPrompt('What decisions were made about the sprint?')">💡 What decisions were made?</span>
+          <span class="prompt-chip" onclick="askQuickPrompt('Who is working on the Docker container task?')">🐳 Who is assigned to Docker?</span>
+          <span class="prompt-chip" onclick="askQuickPrompt('What time is our next team meeting?')">🕒 When is the meeting?</span>
+          <span class="prompt-chip" onclick="askQuickPrompt('Summarize recent discussions from Alice')">👩 Alice's updates</span>
+        </div>
+
+        <div class="rag-input-box">
+          <input type="text" id="rag-query-input" class="input-field" style="margin:0;" placeholder="Ask anything about your team chats, tasks, or decisions..." onkeydown="if(event.key==='Enter') submitRagQuery()">
+          <button id="btn-rag-submit" class="btn-primary" style="background:#00bfff; font-weight:700; white-space:nowrap; padding:0 1.5rem;" onclick="submitRagQuery()">Ask AI ✨</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Action Items Kanban -->
+    <div id="tab-action-items" class="ai-tab-pane">
+      <div class="action-hub-toolbar">
+        <div class="status-filter-pills">
+          <button class="filter-pill active" onclick="filterActionItems('ALL', this)">All Tasks</button>
+          <button class="filter-pill" onclick="filterActionItems('PENDING', this)">Pending</button>
+          <button class="filter-pill" onclick="filterActionItems('IN_PROGRESS', this)">In Progress</button>
+          <button class="filter-pill" onclick="filterActionItems('COMPLETED', this)">Completed</button>
+        </div>
+
+        <div style="display:flex; gap:0.75rem;">
+          <select id="action-room-filter" class="input-field" style="margin:0; width:auto; font-size:0.85rem;">
+            <option value="">All Rooms</option>
+          </select>
+          <button class="btn-primary" style="background:#0ea5e9; font-weight:600;" onclick="AiWorkspace.triggerAutoExtractFromFilter()">✨ Auto-Extract from Room</button>
+          <button class="btn-primary" style="background:#10b981; font-weight:600;" onclick="openNewActionItemModal()">+ New Task</button>
+        </div>
+      </div>
+
+      <div id="action-items-grid" class="action-grid"></div>
+    </div>
+
+    <!-- TAB 3: Meeting Minutes -->
+    <div id="tab-meetings" class="ai-tab-pane">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <h3 style="margin:0; font-size:1.2rem; font-weight:700; color:#0f172a;">AI-Generated Meeting Minutes</h3>
+        <button class="btn-primary" style="background:#00bfff; font-weight:700;" onclick="openNewMeetingNotesModal()">+ Ingest Transcript / Notes</button>
+      </div>
+      <div id="meeting-summaries-list"></div>
+    </div>
+
+    <!-- TAB 4: Translation -->
+    <div id="tab-translator" class="ai-tab-pane">
+      <div class="content-box">
+        <h3 style="margin:0 0 0.5rem; font-size:1.2rem; font-weight:700; color:#0f172a;">🌍 Multilingual AI Translation</h3>
+        <p style="font-size:0.92rem; color:#64748b; margin-bottom:1.5rem;">Translate team messages, client requests, and technical specifications into 10+ languages instantly.</p>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+          <div>
+            <label style="font-weight:600; font-size:0.88rem; color:#475569; display:block; margin-bottom:0.5rem;">Input Message:</label>
+            <textarea id="translate-input" class="input-field" style="height:140px; resize:vertical;">Let's meet at 5 PM for today's sprint review. Working on the project!</textarea>
+          </div>
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+              <label style="font-weight:600; font-size:0.88rem; color:#475569;">Target Language:</label>
+              <select id="translate-lang-select" class="input-field" style="margin:0; width:auto; padding:4px 8px; font-size:0.85rem;">
+                <option value="spanish">Spanish (Español)</option>
+                <option value="french">French (Français)</option>
+                <option value="german">German (Deutsch)</option>
+                <option value="hindi">Hindi (हिन्दी)</option>
+                <option value="japanese">Japanese (日本語)</option>
+              </select>
+            </div>
+            <textarea id="translate-output" class="input-field" style="height:140px; resize:vertical; background:#f8fafc;" readonly placeholder="Translation will appear here..."></textarea>
+          </div>
+        </div>
+
+        <div style="margin-top:1rem; text-align:right;">
+          <button class="btn-primary" style="background:#00bfff; font-weight:700; padding:0.6rem 1.8rem;" onclick="performTranslation()">Translate Message ✨</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: Insights -->
+    <div id="tab-insights" class="ai-tab-pane">
+      <div class="content-box">
+        <h3 style="margin:0 0 1rem; font-size:1.2rem; font-weight:700; color:#0f172a;">📊 AI Collaboration Analytics</h3>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+          <div style="background:#f8fafc; border-radius:12px; padding:1.25rem; border:1px solid #e2e8f0;">
+            <h4 style="margin:0 0 0.75rem; font-size:1rem; color:#0f172a;">Task Status Breakdown</h4>
+            <div style="display:flex; flex-direction:column; gap:0.6rem;">
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px;">
+                  <span>Completed</span>
+                  <span id="insights-comp-count" style="font-weight:700; color:#10b981;">1</span>
+                </div>
+                <div style="background:#e2e8f0; height:8px; border-radius:4px; overflow:hidden;">
+                  <div id="insights-comp-bar" style="background:#10b981; height:100%; width:33%;"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px;">
+                  <span>In Progress</span>
+                  <span id="insights-inprog-count" style="font-weight:700; color:#0284c7;">1</span>
+                </div>
+                <div style="background:#e2e8f0; height:8px; border-radius:4px; overflow:hidden;">
+                  <div style="background:#0284c7; height:100%; width:33%;"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px;">
+                  <span>Pending</span>
+                  <span id="insights-pend-count" style="font-weight:700; color:#f59e0b;">1</span>
+                </div>
+                <div style="background:#e2e8f0; height:8px; border-radius:4px; overflow:hidden;">
+                  <div style="background:#f59e0b; height:100%; width:33%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#f8fafc; border-radius:12px; padding:1.25rem; border:1px solid #e2e8f0;">
+            <h4 style="margin:0 0 0.75rem; font-size:1rem; color:#0f172a;">Team Communication Activity</h4>
+            <div id="insights-user-list" style="display:flex; flex-direction:column; gap:0.5rem;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add New Action Item -->
+  <div id="modal-action-item" class="ai-modal-overlay">
+    <div class="ai-modal-box">
+      <div class="ai-modal-header">
+        <h3 style="margin:0; font-size:1.15rem; font-weight:700;">Create Action Item</h3>
+        <button style="background:none; border:none; color:white; font-size:1.4rem; cursor:pointer;" onclick="closeModal('modal-action-item')">&times;</button>
+      </div>
+      <div class="ai-modal-body">
+        <form onsubmit="AiWorkspace.submitNewActionItem(event)">
+          <label style="font-weight:600; font-size:0.88rem; display:block; margin-bottom:4px;">Task Title *</label>
+          <input type="text" id="ai-task-title" required class="input-field" placeholder="e.g. Implement WebSocket reconnection logic" style="margin-top:0;">
+
+          <label style="font-weight:600; font-size:0.88rem; display:block; margin-bottom:4px;">Description</label>
+          <textarea id="ai-task-desc" class="input-field" style="height:70px;" placeholder="Additional context, requirements, or links..."></textarea>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+            <div>
+              <label style="font-weight:600; font-size:0.88rem; display:block; margin-bottom:4px;">Assignee</label>
+              <select id="ai-task-assignee" class="input-field" style="margin-top:0;">
+                <option value="johndoe">John Doe</option>
+                <option value="alice">Alice Smith</option>
+                <option value="bob">Bob Wilson</option>
+                <option value="emma">Emma Davis</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-weight:600; font-size:0.88rem; display:block; margin-bottom:4px;">Due Date</label>
+              <input type="date" id="ai-task-due" class="input-field" style="margin-top:0;">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+            <div>
+              <label style="font-weight:600; font-size:0.88rem; display:block; margin-bottom:4px;">Associated Room</label>
+              <select id="ai-task-room" class="input-field" style="margin-top:0;">
+                <option value="">General (No room)</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-weight:600; font-size:0.88rem; display:block; margin-bottom:4px;">Priority</label>
+              <select id="ai-task-priority" class="input-field" style="margin-top:0;">
+                <option value="LOW">Low</option>
+                <option value="MEDIUM" selected>Medium</option>
+                <option value="HIGH">High</option>
+                <option value="URGENT">Urgent</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top:1.5rem; display:flex; justify-content:flex-end; gap:0.75rem;">
+            <button type="button" class="btn-cancel" onclick="closeModal('modal-action-item')">Cancel</button>
+            <button type="submit" class="btn-submit" style="background:#00bfff;">Save Task</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Ingest Meeting Notes -->
+  <div id="modal-meeting-notes" class="ai-modal-overlay">
+    <div class="ai-modal-box">
+      <div class="ai-modal-header">
+        <h3 style="margin:0; font-size:1.15rem; font-weight:700;">Ingest Meeting Notes &amp; Minutes</h3>
+        <button style="background:none; border:none; color:white; font-size:1.4rem; cursor:pointer;" onclick="closeModal('modal-meeting-notes')">&times;</button>
+      </div>
+      <div class="ai-modal-body">
+        <form onsubmit="AiWorkspace.submitMeetingNotes(event)">
+          <label style="font-weight:600; font-size:0.88rem; display:block; margin-bottom:4px;">Meeting Title *</label>
+          <input type="text" id="meeting-title-input" required class="input-field" placeholder="e.g. Architecture Review" style="margin-top:0;">
+
+          <label style="font-weight:600; font-size:0.88rem; display:block; margin-bottom:4px;">Raw Transcript or Discussion Notes *</label>
+          <textarea id="meeting-transcript-input" required class="input-field" style="height:150px; font-family:monospace; font-size:0.85rem;" placeholder="Paste meeting notes or discussion here..."></textarea>
+
+          <div style="margin-top:1.5rem; display:flex; justify-content:flex-end; gap:0.75rem;">
+            <button type="button" class="btn-cancel" onclick="closeModal('modal-meeting-notes')">Cancel</button>
+            <button type="submit" class="btn-submit" style="background:#00bfff;">Generate AI Summary ✨</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/ai-workspace.js"></script>
+</body>
+</html>
+

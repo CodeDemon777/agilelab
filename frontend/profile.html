@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - AgileLab</title>
+  <link rel="stylesheet" href="/css/ProfilePage.css">
+  <link rel="stylesheet" href="/css/app.css">
+  <style>
+    .profile-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      padding: 2.5rem;
+      max-width: 580px;
+      margin: 2.5rem auto;
+      text-align: center;
+    }
+    .profile-avatar-big {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 4px solid var(--primary);
+      object-fit: cover;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 191, 255, 0.25);
+    }
+    .avatar-preset-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      padding: 0;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .avatar-preset-btn:hover {
+      transform: scale(1.1);
+      border-color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Header -->
+  <nav class="app-navbar">
+    <a href="/index.html" class="brand-container">
+      <div class="brand-logo">💬</div>
+      <span class="brand-name">AgileLab</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/chats.html" class="nav-link"><span>💬 Chats</span></a></li>
+      <li><a href="/ai-workspace.html" class="nav-link ai-nav-pill"><span>✨ AI Workspace</span></a></li>
+      <li><a href="/notifications.html" class="nav-link"><span>🔔 Notifications</span></a></li>
+    </ul>
+    <div style="display:flex; align-items:center; gap: 1rem;">
+      <button onclick="App.logout()" class="nav-logout-btn">Log Out</button>
+    </div>
+  </nav>
+
+  <div class="profile-card">
+    <img id="profile-display-avatar" src="/images/default-avatar.svg" class="profile-avatar-big" alt="User Avatar">
+    <h2 id="profile-display-name" style="margin: 0; font-size: 1.6rem; color: #1e293b;">Loading Profile...</h2>
+    <p id="profile-display-username" style="color: #64748b; font-size: 0.95rem; margin: 4px 0 0;">@username</p>
+    <p id="profile-display-quote" style="margin: 0.75rem 0 1.5rem; font-style: italic; color: #475569; font-size: 0.95rem;">"Living the dream"</p>
+
+    <div id="profile-save-alert" style="display:none; padding:8px 12px; border-radius:6px; margin-bottom:1rem; font-size:0.88rem;"></div>
+
+    <form id="profile-form" onsubmit="saveProfile(event)" style="text-align: left; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+      <div style="margin-bottom: 1.25rem;">
+        <label style="font-weight: 600; font-size: 0.88rem; color: #334155; display:block; margin-bottom: 4px;">Full Name</label>
+        <input type="text" id="input-full-name" class="input-field" required style="margin: 0;">
+      </div>
+
+      <div style="margin-bottom: 1.25rem;">
+        <label style="font-weight: 600; font-size: 0.88rem; color: #334155; display:block; margin-bottom: 4px;">Status Quote / Headline</label>
+        <input type="text" id="input-status-quote" class="input-field" placeholder="e.g. Building great things 🚀" style="margin: 0;">
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <label style="font-weight: 600; font-size: 0.88rem; color: #334155; display:block; margin-bottom: 6px;">Choose Avatar Preset</label>
+        <div style="display: flex; gap: 0.6rem; margin-bottom: 0.6rem; flex-wrap: wrap;">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=JohnDoe" class="avatar-preset-btn" onclick="selectAvatar(this.src)">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Alice" class="avatar-preset-btn" onclick="selectAvatar(this.src)">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Bob" class="avatar-preset-btn" onclick="selectAvatar(this.src)">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Emma" class="avatar-preset-btn" onclick="selectAvatar(this.src)">
+          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Felix" class="avatar-preset-btn" onclick="selectAvatar(this.src)">
+        </div>
+        <input type="text" id="input-avatar-url" class="input-field" placeholder="Or paste custom image/avatar URL..." style="margin: 0;">
+      </div>
+
+      <button type="submit" id="btn-save-profile" class="btn-submit" style="width: 100%; padding: 0.75rem; font-weight: 700; background: #00bfff;">
+        Save Changes
+      </button>
+    </form>
+  </div>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    let user = null;
+
+    async function loadProfile() {
+      try {
+        const res = await AppConfig.fetch('/api/auth/current');
+        if (res.ok) {
+          user = await res.json();
+          document.getElementById('profile-display-avatar').src = user.avatarUrl || '/images/default-avatar.svg';
+          document.getElementById('profile-display-name').innerText = user.fullName || user.username;
+          document.getElementById('profile-display-username').innerText = '@' + user.username;
+          document.getElementById('profile-display-quote').innerText = `"${user.statusQuote || 'Living the dream'}"`;
+
+          document.getElementById('input-full-name').value = user.fullName || '';
+          document.getElementById('input-status-quote').value = user.statusQuote || '';
+          document.getElementById('input-avatar-url').value = user.avatarUrl || '';
+        }
+      } catch (e) {}
+    }
+
+    function selectAvatar(url) {
+      document.getElementById('input-avatar-url').value = url;
+      document.getElementById('profile-display-avatar').src = url;
+    }
+
+    async function saveProfile(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('input-full-name').value.trim();
+      const statusQuote = document.getElementById('input-status-quote').value.trim();
+      const avatarUrl = document.getElementById('input-avatar-url').value.trim();
+      const alertBox = document.getElementById('profile-save-alert');
+      const submitBtn = document.getElementById('btn-save-profile');
+
+      submitBtn.innerText = 'Saving... ⏳';
+
+      try {
+        const res = await AppConfig.fetch('/api/users/profile', {
+          method: 'POST',
+          body: JSON.stringify({ fullName, statusQuote, avatarUrl })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          alertBox.style.display = 'block';
+          alertBox.style.background = '#dcfce7';
+          alertBox.style.color = '#15803d';
+          alertBox.innerText = 'Profile saved successfully! ✨';
+          submitBtn.innerText = 'Save Changes';
+          loadProfile();
+        } else {
+          alertBox.style.display = 'block';
+          alertBox.style.background = '#fee2e2';
+          alertBox.style.color = '#b91c1c';
+          alertBox.innerText = data.message || 'Failed to update profile.';
+          submitBtn.innerText = 'Save Changes';
+        }
+      } catch (err) {
+        submitBtn.innerText = 'Save Changes';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => loadProfile());
+  </script>
+</body>
+</html>
+

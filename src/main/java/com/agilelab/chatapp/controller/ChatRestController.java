@@ -32,22 +32,22 @@ public class ChatRestController {
         this.messagingTemplate = messagingTemplate;
     }
 
-    @GetMapping("/chats")
+    @GetMapping({"/chats", "/chat/rooms"})
     public ResponseEntity<List<ChatRoomDto>> getRooms(Principal principal) {
         return ResponseEntity.ok(chatService.getUserChatRooms(principal.getName()));
     }
 
-    @GetMapping("/chats/{roomId}")
+    @GetMapping({"/chats/{roomId}", "/chat/rooms/{roomId}"})
     public ResponseEntity<ChatRoomDto> getRoom(@PathVariable Long roomId, Principal principal) {
         return ResponseEntity.ok(chatService.getChatRoomDetails(roomId, principal.getName()));
     }
 
-    @GetMapping("/chats/{roomId}/messages")
+    @GetMapping({"/chats/{roomId}/messages", "/chat/rooms/{roomId}/messages"})
     public ResponseEntity<List<MessageDto>> getMessages(@PathVariable Long roomId, Principal principal) {
         return ResponseEntity.ok(chatService.getRoomMessages(roomId, principal.getName()));
     }
 
-    @PostMapping("/chats/direct")
+    @PostMapping({"/chats/direct", "/chat/direct"})
     public ResponseEntity<?> createDirectChat(@RequestBody Map<String, String> payload, Principal principal) {
         String targetUsername = payload.get("username");
         if (targetUsername == null || targetUsername.isBlank()) {

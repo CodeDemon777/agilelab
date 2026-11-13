@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgileLab - AI-Powered Real-Time Collaboration</title>
+  <link rel="stylesheet" href="/css/LandingPage.css">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <!-- Navigation Header -->
+  <nav class="app-navbar">
+    <a href="/index.html" class="brand-container">
+      <div class="brand-logo">💬</div>
+      <span class="brand-name">AgileLab</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/chats.html" class="nav-link"><span>💬 Chats</span></a></li>
+      <li><a href="/ai-workspace.html" class="nav-link ai-nav-pill"><span>✨ AI Workspace</span></a></li>
+      <li><a href="/notifications.html" class="nav-link"><span>🔔 Notifications</span></a></li>
+    </ul>
+    <div style="display:flex; align-items:center; gap: 1rem;">
+      <a href="/login.html" id="navbar-login-btn" class="btn btn-login" style="padding: 0.4rem 1rem; font-size: 0.88rem;">Log In</a>
+      <div id="navbar-user-profile" style="display:none; align-items:center; gap: 0.6rem;">
+        <a href="/profile.html" class="user-nav-profile">
+          <img id="navbar-user-avatar" src="/images/default-avatar.svg" class="nav-avatar" style="width:30px; height:30px; border-radius:50%;">
+          <span id="navbar-user-name" style="font-weight:600; font-size:0.9rem;">User</span>
+        </a>
+        <button onclick="App.logout()" class="nav-logout-btn">Log Out</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="landing-page">
+    <header class="hero-section">
+      <div style="margin-bottom: 1.5rem;">
+        <span style="font-size: 3.5rem;">💬</span>
+      </div>
+      <h1 class="tagline">Connect. Chat. Collaborate.</h1>
+      <p class="overview">Enterprise-grade collaboration platform powered by real-time STOMP WebSockets, peer-to-peer WebRTC video calls, and an Autonomous AI Assistant for smart sprint automation.</p>
+
+      <div class="cta-buttons">
+        <a href="/signup.html" class="btn btn-signup">Sign Up</a>
+        <a href="/login.html" class="btn btn-login">Log In</a>
+        <a href="/ai-workspace.html" class="btn" style="background: linear-gradient(135deg, #0284c7, #10b981); color:white; font-weight:700;">✨ Explore AI Workspace</a>
+      </div>
+
+      <div style="margin-top: 3.5rem; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
+        <div style="background: white; padding: 1.25rem 1.75rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); max-width: 260px; text-align: left;">
+          <h3 style="margin: 0 0 8px 0; color: #00bfff;">⚡ Instant Chat</h3>
+          <p style="margin: 0; color: #666; font-size: 0.88rem;">STOMP WebSockets with instant dual-panel delivery, live typing indicators, and user presence.</p>
+        </div>
+        <div style="background: white; padding: 1.25rem 1.75rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); max-width: 260px; text-align: left;">
+          <h3 style="margin: 0 0 8px 0; color: #ff6347;">📹 WebRTC Calls</h3>
+          <p style="margin: 0; color: #666; font-size: 0.88rem;">Peer-to-peer audio &amp; video calls with screen share, live Speech-to-Text transcription, and notes.</p>
+        </div>
+        <div style="background: white; padding: 1.25rem 1.75rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); max-width: 260px; text-align: left;">
+          <h3 style="margin: 0 0 8px 0; color: #10b981;">✨ Smart AI Assistant</h3>
+          <p style="margin: 0; color: #666; font-size: 0.88rem;">RAG semantic search across past chats, automated task extraction &amp; Kanban, and discussion summaries.</p>
+        </div>
+      </div>
+    </header>
+
+    <footer>
+      <p style="color: #999; font-size: 0.85rem; margin-top: 1rem;">AgileLab Full-Stack Collaboration Platform &copy; 2026</p>
+    </footer>
+  </div>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
+

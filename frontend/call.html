@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video &amp; Voice Call - AgileLab</title>
+  <link rel="stylesheet" href="/css/CallPage.css">
+  <link rel="stylesheet" href="/css/app.css">
+  <style>
+    body {
+      flex-direction: column;
+      justify-content: flex-start;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #0f172a;
+    }
+    .video-viewport {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 140px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #020617;
+    }
+    #remote-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background-color: #1e293b;
+    }
+    #local-video {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      width: 220px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 3px solid #00bfff;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      background-color: #334155;
+      z-index: 20;
+    }
+    .call-overlay-header {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      z-index: 20;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+    .call-controls-bar {
+      height: 75px;
+      background: #0f172a;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 0 1rem;
+      flex-wrap: wrap;
+    }
+    .btn-call-ctrl {
+      padding: 0.7rem 1.3rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: transform 0.2s, background-color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: white;
+      background-color: #00bfff;
+    }
+    .btn-call-ctrl:hover {
+      transform: scale(1.05);
+    }
+    .btn-call-ctrl.end-call { background-color: #ff6347; }
+    .btn-call-ctrl.secondary { background-color: #334155; }
+  </style>
+</head>
+<body>
+  <!-- Navigation Header -->
+  <nav class="app-navbar" style="background: #0f172a; border-bottom: 1px solid #1e293b;">
+    <a href="/index.html" class="brand-container">
+      <div class="brand-logo">💬</div>
+      <span class="brand-name" style="color:white;">AgileLab</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/chats.html" class="nav-link" style="color:#94a3b8;"><span>💬 Chats</span></a></li>
+      <li><a href="/ai-workspace.html" class="nav-link ai-nav-pill"><span>✨ AI Workspace</span></a></li>
+    </ul>
+  </nav>
+
+  <!-- Video Viewport -->
+  <div class="video-viewport">
+    <div class="call-overlay-header">
+      <h2 id="call-target-title" style="margin: 0; font-size: 1.35rem;">Connecting Call...</h2>
+      <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+        <span class="presence-dot online"></span>
+        <span id="call-duration-timer" style="font-size: 0.95rem; font-family: monospace;">00:00</span>
+      </div>
+    </div>
+
+    <!-- Main Remote Video -->
+    <video id="remote-video" autoplay playsinline></video>
+
+    <!-- Local Self View -->
+    <video id="local-video" autoplay playsinline muted></video>
+  </div>
+
+  <!-- Call Controls Bottom Bar -->
+  <div class="call-controls-bar">
+    <button id="btn-toggle-mic" class="btn-call-ctrl">Mute Mic</button>
+    <button id="btn-toggle-cam" class="btn-call-ctrl">Turn Cam Off</button>
+    <button id="btn-screen-share" class="btn-call-ctrl secondary">Screen Share</button>
+    <button id="btn-toggle-transcript" class="btn-call-ctrl" style="background: linear-gradient(135deg, #0284c7, #06b6d4);">🎙️ Live AI Transcript</button>
+    <button id="btn-generate-notes" class="btn-call-ctrl" style="background: linear-gradient(135deg, #10b981, #059669);">✨ Meeting Notes</button>
+    <button id="btn-end-call" class="btn-call-ctrl end-call">End Call</button>
+  </div>
+
+  <!-- Live Transcript Side Drawer -->
+  <div id="transcript-drawer" style="display:none; position:fixed; right:20px; top:80px; width:340px; max-height:calc(100vh - 200px); background:rgba(15, 23, 42, 0.9); backdrop-filter:blur(10px); border:1px solid rgba(0,191,255,0.3); border-radius:12px; z-index:35; color:white; padding:1rem; box-shadow:0 10px 30px rgba(0,0,0,0.5); overflow-y:auto;">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.15); padding-bottom:6px; margin-bottom:8px;">
+      <h4 style="margin:0; font-size:0.95rem; color:#38bdf8;">🎙️ Live AI Transcription</h4>
+      <button onclick="toggleTranscriptDrawer()" style="background:none; border:none; color:#94a3b8; font-size:1.2rem; cursor:pointer;">&times;</button>
+    </div>
+    <div id="transcript-feed" style="font-size:0.86rem; line-height:1.45; color:#e2e8f0; display:flex; flex-direction:column; gap:6px;">
+      <em style="color:#94a3b8;">Listening to speech... (or type notes below)</em>
+    </div>
+    <div style="margin-top:10px; border-top:1px solid rgba(255,255,255,0.1); padding-top:8px;">
+      <input type="text" id="manual-transcript-input" placeholder="Type a meeting note..." style="width:100%; box-sizing:border-box; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:white; padding:6px 10px; font-size:0.82rem;" onkeydown="if(event.key==='Enter') appendManualTranscript()">
+    </div>
+  </div>
+
+  <!-- Meeting Notes Result Modal -->
+  <div id="modal-call-notes" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(6px); z-index:50; justify-content:center; align-items:center;">
+    <div style="background:white; border-radius:14px; max-width:600px; width:90%; padding:1.5rem; max-height:80vh; overflow-y:auto; box-shadow:0 20px 40px rgba(0,0,0,0.4);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #e2e8f0; padding-bottom:0.75rem;">
+        <h3 style="margin:0; font-size:1.2rem; color:#0f172a;">✨ Generated Meeting Minutes</h3>
+        <button onclick="closeCallNotesModal()" style="background:none; border:none; font-size:1.4rem; cursor:pointer;">&times;</button>
+      </div>
+      <div id="call-notes-content">
+        <p style="color:#64748b;">Processing transcript with AI... ⏳</p>
+      </div>
+      <div style="margin-top:1.5rem; text-align:right;">
+        <a href="/ai-workspace.html" class="btn-primary" style="background:#00bfff; text-decoration:none; display:inline-block; padding:0.5rem 1.25rem; font-weight:700;">Open in AI Workspace &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Call Status Box -->
+  <div class="call-status" style="position: absolute; bottom: 85px; left: 50%; transform: translateX(-50%); z-index: 25; background: rgba(0,0,0,0.65); padding: 6px 18px; border-radius: 20px; color: white;">
+    <p id="call-status-text" style="margin: 0; font-size: 0.9rem; color: #e2e8f0;">Waiting for peer to join...</p>
+  </div>
+
+  <script src="/js/sockjs.min.js"></script>
+  <script src="/js/stomp.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/call.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - AgileLab</title>
+  <link rel="stylesheet" href="/css/LogIn.css">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body style="display:flex; justify-content:center; align-items:center; min-height:100vh; background-color: var(--bg-page);">
+  <div class="login-card" style="max-width: 440px;">
+    <div style="text-align: center; margin-bottom: 1.5rem;">
+      <a href="/index.html" class="brand-container" style="justify-content: center; margin-bottom: 0.5rem;">
+        <div class="brand-logo">💬</div>
+        <span class="brand-name">AgileLab</span>
+      </a>
+      <h2 class="login-title" style="margin: 0; font-size: 1.5rem;">Create Your Account</h2>
+      <p style="color: #64748b; font-size: 0.88rem; margin: 4px 0 0;">Join AgileLab real-time chat &amp; AI workspace</p>
+    </div>
+
+    <!-- Alert Box -->
+    <div id="signup-alert" class="alert error" style="display:none;"></div>
+
+    <form id="signup-form" onsubmit="handleSignup(event)">
+      <div style="margin-bottom: 1rem;">
+        <label for="fullName" style="display: block; font-weight: 600; font-size: 0.85rem; color: #334155; margin-bottom: 4px;">Full Name</label>
+        <input type="text" id="fullName" class="input-field" placeholder="e.g. Sarah Connor" required autofocus style="margin: 0;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label for="username" style="display: block; font-weight: 600; font-size: 0.85rem; color: #334155; margin-bottom: 4px;">Username</label>
+        <input type="text" id="username" class="input-field" placeholder="e.g. sarahc" required style="margin: 0;">
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label for="email" style="display: block; font-weight: 600; font-size: 0.85rem; color: #334155; margin-bottom: 4px;">Email Address</label>
+        <input type="email" id="email" class="input-field" placeholder="sarah@example.com" required style="margin: 0;">
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <label for="password" style="display: block; font-weight: 600; font-size: 0.85rem; color: #334155; margin-bottom: 4px;">Password</label>
+        <input type="password" id="password" class="input-field" placeholder="••••••••" required minlength="6" style="margin: 0;">
+      </div>
+
+      <button type="submit" id="btn-signup-submit" class="btn-submit" style="width: 100%; padding: 0.75rem; font-weight: 700;">
+        Create Account
+      </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.5rem; font-size: 0.88rem; color: #64748b;">
+      Already have an account? <a href="/login.html" style="color: var(--primary); font-weight: 600; text-decoration: none;">Log In</a>
+    </div>
+  </div>
+
+  <script src="/js/config.js"></script>
+  <script>
+    async function handleSignup(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('fullName').value.trim();
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      const alertBox = document.getElementById('signup-alert');
+      const submitBtn = document.getElementById('btn-signup-submit');
+
+      alertBox.style.display = 'none';
+      submitBtn.innerText = 'Creating account... ⏳';
+      submitBtn.disabled = true;
+
+      try {
+        const resp = await AppConfig.fetch('/api/auth/register', {
+          method: 'POST',
+          body: JSON.stringify({ fullName, username, email, password })
+        });
+
+        const data = await resp.json();
+        if (resp.ok && data.success) {
+          // Automatically log in
+          const loginResp = await AppConfig.fetch('/api/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ username, password })
+          });
+          if (loginResp.ok) {
+            window.location.href = '/chats.html';
+          } else {
+            window.location.href = '/login.html?registered=true';
+          }
+        } else {
+          alertBox.innerText = data.message || 'Registration failed. Please check inputs.';
+          alertBox.style.display = 'block';
+          submitBtn.innerText = 'Create Account';
+          submitBtn.disabled = false;
+        }
+      } catch (err) {
+        alertBox.innerText = 'Could not connect to backend. Please check connection.';
+        alertBox.style.display = 'block';
+        submitBtn.innerText = 'Create Account';
+        submitBtn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
+

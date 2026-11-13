@@ -10,7 +10,7 @@ const ChatApp = {
     typingTimeout: null,
     displayedMessageIds: new Set(),
 
-    init: function() {
+    init: function () {
         this.bindEvents();
 
         // Listen for STOMP connection from App
@@ -47,7 +47,7 @@ const ChatApp = {
         }
     },
 
-    bindEvents: function() {
+    bindEvents: function () {
         // Search bar filtering
         const searchInput = document.getElementById('search-chats');
         if (searchInput) {
@@ -85,7 +85,7 @@ const ChatApp = {
         }
     },
 
-    selectRoom: async function(roomId) {
+    selectRoom: async function (roomId) {
         if (!roomId) return;
         this.currentRoomId = roomId;
         this.displayedMessageIds.clear();
@@ -119,7 +119,7 @@ const ChatApp = {
         }
     },
 
-    setupActiveRoom: function() {
+    setupActiveRoom: function () {
         if (!this.stompClient || !this.currentRoomId) return;
 
         // Unsubscribe prior room
@@ -140,7 +140,7 @@ const ChatApp = {
         });
     },
 
-    renderRoomHeader: function(room) {
+    renderRoomHeader: function (room) {
         const partnerEl = document.getElementById('chat-partner-name');
         const statusEl = document.getElementById('chat-partner-status');
         const avatarEl = document.getElementById('chat-partner-avatar');
@@ -172,7 +172,7 @@ const ChatApp = {
         }
     },
 
-    loadMessages: async function(roomId) {
+    loadMessages: async function (roomId) {
         const historyContainer = document.getElementById('chat-history');
         if (!historyContainer) return;
 
@@ -196,7 +196,7 @@ const ChatApp = {
         }
     },
 
-    appendMessage: function(msg, autoScroll = true) {
+    appendMessage: function (msg, autoScroll = true) {
         const historyContainer = document.getElementById('chat-history');
         if (!historyContainer) return;
 
@@ -240,7 +240,7 @@ const ChatApp = {
         if (autoScroll) this.scrollToBottom();
     },
 
-    sendMessage: function() {
+    sendMessage: function () {
         const input = document.getElementById('chat-message-input');
         if (!input) return;
         const text = input.value.trim();
@@ -274,7 +274,7 @@ const ChatApp = {
         }
     },
 
-    notifyTyping: function(isTyping) {
+    notifyTyping: function (isTyping) {
         if (!this.stompClient || !window.App.connected || !this.currentRoomId) return;
 
         if (this.typingTimeout) clearTimeout(this.typingTimeout);
@@ -294,7 +294,7 @@ const ChatApp = {
         }
     },
 
-    renderTypingIndicator: function(data) {
+    renderTypingIndicator: function (data) {
         if (window.App.currentUser && data.username === window.App.currentUser.username) return;
 
         let typingEl = document.getElementById('chat-typing-indicator');
@@ -314,7 +314,7 @@ const ChatApp = {
         }
     },
 
-    updateChatItemPreview: function(msg) {
+    updateChatItemPreview: function (msg) {
         const item = document.querySelector(`.chat-item[data-room-id="${msg.roomId}"]`);
         if (item) {
             const preview = item.querySelector('.chat-preview');
@@ -325,7 +325,7 @@ const ChatApp = {
         }
     },
 
-    startCall: function(callType) {
+    startCall: function (callType) {
         if (!this.currentRoom) return;
 
         const roomId = 'call-' + this.currentRoom.id + '-' + Date.now();
@@ -344,19 +344,192 @@ const ChatApp = {
         window.location.href = `/call/${roomId}?target=${encodeURIComponent(target)}&type=${callType}`;
     },
 
-    scrollToBottom: function() {
+    scrollToBottom: function () {
         const historyContainer = document.getElementById('chat-history');
         if (historyContainer) {
             historyContainer.scrollTop = historyContainer.scrollHeight;
         }
     },
 
-    escapeHtml: function(text) {
+    escapeHtml: function (text) {
         if (!text) return '';
         const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
         return text.replace(/[&<>"']/g, m => map[m]);
+    },
+
+    toggleAiMenu: function (e) {
+        if (e) e.stopPropagation();
+        const menu = document.getElementById('ai-chat-menu');
+        if (menu) {
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+    },
+
+    triggerSummarize: async function () {
+        this.toggleAiMenu();
+        if (!this.currentRoomId) return;
+
+        const modal = document.getElementById('modal-ai-summary');
+        const loading = document.getElementById('ai-summary-loading');
+        const content = document.getElementById('ai-summary-content');
+        const label = document.getElementById('ai-summary-room-label');
+
+        modal.classList.add('active');
+        loading.style.display = 'block';
+        content.style.display = 'none';
+        label.innerText = (this.currentRoom ? this.currentRoom.displayName : 'Room #' + this.currentRoomId);
+
+        try {
+            const res = await fetch(`/api/ai/summarize/${this.currentRoomId}`);
+            const data = await res.json();
+
+            loading.style.display = 'none';
+            content.style.display = 'block';
+
+            document.getElementById('ai-summary-sentiment').innerText = data.sentiment || 'Balanced';
+            document.getElementById('ai-summary-msg-count').innerText = `${data.messageCount} messages analyzed`;
+            document.getElementById('ai-summary-text').innerText = data.executiveSummary || 'No discussion summary available.';
+
+            const decList = document.getElementById('ai-summary-decisions');
+            decList.innerHTML = '';
+            if (data.decisions && data.decisions.length > 0) {
+                data.decisions.forEach(d => {
+                    const li = document.createElement('li');
+                    li.innerText = d;
+                    decList.appendChild(li);
+                });
+            } else {
+                decList.innerHTML = '<li style="color:#94a3b8;">No explicit consensus or decisions recorded yet.</li>';
+            }
+
+            const taskList = document.getElementById('ai-summary-tasks');
+            taskList.innerHTML = '';
+            if (data.actionItems && data.actionItems.length > 0) {
+                data.actionItems.forEach(t => {
+                    const li = document.createElement('li');
+                    li.innerText = t;
+                    taskList.appendChild(li);
+                });
+            } else {
+                taskList.innerHTML = '<li style="color:#94a3b8;">No action items detected in this chat.</li>';
+            }
+        } catch (err) {
+            console.error('Error summarizing chat:', err);
+            loading.innerHTML = '<p style="color:#ef4444;">Failed to generate AI summary. Please try again.</p>';
+        }
+    },
+
+    closeAiSummaryModal: function () {
+        const modal = document.getElementById('modal-ai-summary');
+        if (modal) modal.classList.remove('active');
+    },
+
+    copySummaryToClipboard: function () {
+        const text = document.getElementById('ai-summary-text').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Summary copied to clipboard!');
+        });
+    },
+
+    triggerExtractTasks: async function () {
+        this.toggleAiMenu();
+        if (!this.currentRoomId) return;
+
+        const modal = document.getElementById('modal-ai-tasks');
+        const loading = document.getElementById('ai-tasks-loading');
+        const list = document.getElementById('ai-tasks-list');
+
+        modal.classList.add('active');
+        loading.style.display = 'block';
+        list.innerHTML = '';
+
+        try {
+            const res = await fetch(`/api/ai/action-items/extract/${this.currentRoomId}`, { method: 'POST' });
+            const tasks = await res.json();
+
+            loading.style.display = 'none';
+            if (tasks.length === 0) {
+                list.innerHTML = '<p style="color:#94a3b8; text-align:center; padding:1rem;">No new tasks detected in current messages.</p>';
+            } else {
+                tasks.forEach(t => {
+                    const row = document.createElement('div');
+                    row.style.cssText = 'background:#f8fafc; padding:10px 14px; border-radius:8px; border:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;';
+                    row.innerHTML = `
+                        <div>
+                            <strong style="font-size:0.92rem; color:#0f172a;">${escapeHtml(t.title)}</strong>
+                            <div style="font-size:0.78rem; color:#64748b;">Assigned to: ${escapeHtml(t.assignedToName || 'Team')} • Due: ${escapeHtml(t.formattedDueDate || 'Soon')}</div>
+                        </div>
+                        <span style="font-size:0.72rem; padding:2px 8px; border-radius:4px; font-weight:700; background:#e0f2fe; color:#0369a1;">${escapeHtml(t.priority || 'MEDIUM')}</span>
+                    `;
+                    list.appendChild(row);
+                });
+            }
+        } catch (err) {
+            console.error('Error extracting tasks:', err);
+            loading.innerHTML = '<p style="color:#ef4444;">Failed to extract tasks.</p>';
+        }
+    },
+
+    closeAiTasksModal: function () {
+        const modal = document.getElementById('modal-ai-tasks');
+        if (modal) modal.classList.remove('active');
+    },
+
+    openTranslateModal: function () {
+        this.toggleAiMenu();
+        const modal = document.getElementById('modal-ai-translate');
+        if (modal) modal.classList.add('active');
+    },
+
+    closeAiTranslateModal: function () {
+        const modal = document.getElementById('modal-ai-translate');
+        if (modal) modal.classList.remove('active');
+    },
+
+    translateCurrentRoom: async function () {
+        const targetLanguage = document.getElementById('chat-translate-lang').value;
+        const results = document.getElementById('chat-translate-results');
+        results.innerHTML = '<p style="color:#64748b; text-align:center;">Translating recent room messages... ⏳</p>';
+
+        if (!this.currentRoomId) return;
+
+        try {
+            const res = await fetch(`/api/chat/rooms/${this.currentRoomId}/messages`);
+            const msgs = await res.json();
+            const slice = msgs.slice(-5);
+
+            results.innerHTML = '';
+            for (const m of slice) {
+                const tr = await fetch('/api/ai/translate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: m.content, targetLanguage })
+                });
+                const tData = await tr.json();
+
+                const box = document.createElement('div');
+                box.style.cssText = 'background:#f8fafc; padding:8px 12px; border-radius:8px; border:1px solid #e2e8f0; font-size:0.86rem;';
+                box.innerHTML = `
+                    <div style="font-weight:600; color:#0284c7; font-size:0.78rem;">${escapeHtml(m.senderName)}:</div>
+                    <div style="color:#1e293b; margin:2px 0;">${escapeHtml(tData.translatedText)}</div>
+                    <div style="font-size:0.72rem; color:#94a3b8; font-style:italic;">Orig: "${escapeHtml(m.content)}"</div>
+                `;
+                results.appendChild(box);
+            }
+        } catch (err) {
+            console.error('Error in translateCurrentRoom:', err);
+            results.innerHTML = '<p style="color:#ef4444; text-align:center;">Failed to translate conversation.</p>';
+        }
     }
 };
+
+window.addEventListener('click', function(e) {
+    const menu = document.getElementById('ai-chat-menu');
+    const btn = document.getElementById('btn-ai-menu');
+    if (menu && menu.style.display === 'block' && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
+        menu.style.display = 'none';
+    }
+});
 
 // Modal handlers for New Chat & Add Members
 function openNewChatModal() {

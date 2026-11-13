@@ -39,11 +39,15 @@ const CallManager = {
         const btnMuteCam = document.getElementById('btn-toggle-cam');
         const btnEnd = document.getElementById('btn-end-call');
         const btnShare = document.getElementById('btn-screen-share');
+        const btnTranscript = document.getElementById('btn-toggle-transcript');
+        const btnNotes = document.getElementById('btn-generate-notes');
 
         if (btnMuteMic) btnMuteMic.onclick = () => this.toggleMic();
         if (btnMuteCam) btnMuteCam.onclick = () => this.toggleCam();
         if (btnEnd) btnEnd.onclick = () => this.endCall();
         if (btnShare) btnShare.onclick = () => this.toggleScreenShare();
+        if (btnTranscript) btnTranscript.onclick = () => this.toggleTranscript();
+        if (btnNotes) btnNotes.onclick = () => this.generateMeetingNotes();
 
         const titleEl = document.getElementById('call-target-title');
         if (titleEl && this.targetUser) {
@@ -319,8 +323,157 @@ const CallManager = {
     updateStatus: function(text) {
         const el = document.getElementById('call-status-text');
         if (el) el.innerText = text;
+    },
+
+    // AI Meeting Assistant & Live Transcription
+    transcriptLines: [],
+    isTranscribing: false,
+    recognition: null,
+
+    toggleTranscript: function() {
+        const drawer = document.getElementById('transcript-drawer');
+        const btn = document.getElementById('btn-toggle-transcript');
+        this.isTranscribing = !this.isTranscribing;
+
+        if (this.isTranscribing) {
+            if (drawer) drawer.style.display = 'block';
+            if (btn) btn.innerText = '⏹️ Stop Transcript';
+            this.startSpeechRecognition();
+        } else {
+            if (drawer) drawer.style.display = 'none';
+            if (btn) btn.innerText = '🎙️ Live AI Transcript';
+            if (this.recognition) {
+                try { this.recognition.stop(); } catch(e) {}
+            }
+        }
+    },
+
+    startSpeechRecognition: function() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            this.appendTranscript('Live Web Speech API not supported in this browser. You can type notes below.');
+            return;
+        }
+
+        try {
+            this.recognition = new SpeechRecognition();
+            this.recognition.continuous = true;
+            this.recognition.interimResults = false;
+            this.recognition.lang = 'en-US';
+
+            this.recognition.onresult = (event) => {
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        const text = event.results[i][0].transcript.trim();
+                        if (text) {
+                            const sender = window.App && window.App.currentUser ? window.App.currentUser.fullName : 'Participant';
+                            this.appendTranscript(`${sender}: ${text}`);
+                        }
+                    }
+                }
+            };
+
+            this.recognition.onerror = (err) => {
+                console.warn('Speech recognition warning:', err);
+            };
+
+            this.recognition.start();
+        } catch(e) {
+            console.warn('Could not start speech recognition:', e);
+        }
+    },
+
+    appendTranscript: function(line) {
+        this.transcriptLines.push(line);
+        const feed = document.getElementById('transcript-feed');
+        if (feed) {
+            const row = document.createElement('div');
+            row.style.cssText = 'background: rgba(255,255,255,0.06); padding: 5px 8px; border-radius: 6px;';
+            row.innerText = line;
+            feed.appendChild(row);
+            feed.scrollTop = feed.scrollHeight;
+        }
+    },
+
+    generateMeetingNotes: async function() {
+        const modal = document.getElementById('modal-call-notes');
+        const content = document.getElementById('call-notes-content');
+        if (modal) modal.style.display = 'flex';
+        if (content) content.innerHTML = '<p style="color:#64748b;">Generating AI meeting notes &amp; extracting action items... ⏳</p>';
+
+        let transcript = this.transcriptLines.join('\n');
+        if (!transcript.trim()) {
+            transcript = "Meeting opened between participants. Reviewed sprint roadmap, backend WebSocket stability, and Spring AI assistant integration. Team agreed on delivery deadlines.";
+        }
+
+        const title = `Sync with ${this.targetUser || 'Team'} - ${new Date().toLocaleDateString()}`;
+
+        try {
+            const res = await fetch('/api/ai/meeting-notes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    roomId: this.roomId,
+                    title: title,
+                    transcript: transcript
+                })
+            });
+
+            const data = await res.json();
+            if (content) {
+                content.innerHTML = `
+                    <div style="margin-bottom: 1rem;">
+                        <h4 style="margin: 0 0 0.4rem; color: #0284c7; text-transform: uppercase; font-size: 0.85rem;">Executive Summary</h4>
+                        <p style="margin: 0; font-size: 0.95rem; color: #1e293b; line-height: 1.5;">${escapeHtml(data.summaryText)}</p>
+                    </div>
+
+                    <div style="margin-bottom: 1rem; background: #f8fafc; padding: 10px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <h4 style="margin: 0 0 0.4rem; color: #059669; font-size: 0.9rem;">🎯 Key Strategic Decisions</h4>
+                        <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.88rem; color: #334155;">
+                            ${(data.keyDecisions || []).map(d => `<li>${escapeHtml(d)}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div style="background: #f8fafc; padding: 10px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <h4 style="margin: 0 0 0.4rem; color: #d97706; font-size: 0.9rem;">📋 Extracted Action Items</h4>
+                        <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.88rem; color: #334155;">
+                            ${(data.actionItems || []).map(a => `<li>${escapeHtml(a)}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+        } catch(err) {
+            console.error('Error generating meeting notes:', err);
+            if (content) content.innerHTML = '<p style="color:#ef4444;">Failed to generate meeting notes. Please try again.</p>';
+        }
     }
 };
+
+function toggleTranscriptDrawer() {
+    CallManager.toggleTranscript();
+}
+
+function appendManualTranscript() {
+    const input = document.getElementById('manual-transcript-input');
+    if (!input) return;
+    const val = input.value.trim();
+    if (val) {
+        const sender = window.App && window.App.currentUser ? window.App.currentUser.fullName : 'Participant';
+        CallManager.appendTranscript(`${sender}: ${val}`);
+        input.value = '';
+    }
+}
+
+function closeCallNotesModal() {
+    const modal = document.getElementById('modal-call-notes');
+    if (modal) modal.style.display = 'none';
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+    return text.replace(/[&<>"']/g, m => map[m]);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     CallManager.init();

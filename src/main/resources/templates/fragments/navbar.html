@@ -15,6 +15,11 @@
             </a>
         </li>
         <li>
+            <a href="/ai-workspace" class="nav-link ai-nav-pill" th:classappend="${activeTab == 'ai-workspace'} ? 'active' : ''">
+                <span>✨ AI Workspace</span>
+            </a>
+        </li>
+        <li>
             <a href="/notifications" class="nav-link" th:classappend="${activeTab == 'notifications'} ? 'active' : ''">
                 <span>🔔 Notifications</span>
                 <span id="navbar-notif-badge" class="nav-badge"

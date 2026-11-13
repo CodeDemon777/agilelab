@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Component
@@ -16,6 +17,8 @@ public class DataInitializer implements CommandLineRunner {
     private final ChatParticipantRepository participantRepository;
     private final ChatMessageRepository messageRepository;
     private final NotificationRepository notificationRepository;
+    private final ActionItemRepository actionItemRepository;
+    private final MeetingSummaryRepository meetingSummaryRepository;
     private final PasswordEncoder passwordEncoder;
 
     public DataInitializer(UserRepository userRepository,
@@ -23,12 +26,16 @@ public class DataInitializer implements CommandLineRunner {
                            ChatParticipantRepository participantRepository,
                            ChatMessageRepository messageRepository,
                            NotificationRepository notificationRepository,
+                           ActionItemRepository actionItemRepository,
+                           MeetingSummaryRepository meetingSummaryRepository,
                            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.chatRoomRepository = chatRoomRepository;
         this.participantRepository = participantRepository;
         this.messageRepository = messageRepository;
         this.notificationRepository = notificationRepository;
+        this.actionItemRepository = actionItemRepository;
+        this.meetingSummaryRepository = meetingSummaryRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -110,12 +117,58 @@ public class DataInitializer implements CommandLineRunner {
         gm3.setTimestamp(LocalDateTime.now().minusHours(1));
         ChatMessage gm4 = new ChatMessage(groupChat, emma, "I'll join the video call at 5 PM too!", MessageType.CHAT);
         gm4.setTimestamp(LocalDateTime.now().minusMinutes(30));
+        ChatMessage gm5 = new ChatMessage(groupChat, alice, "Action item: Alice will finish the Spring AI integration and RAG pipeline by tomorrow.", MessageType.CHAT);
+        gm5.setTimestamp(LocalDateTime.now().minusMinutes(20));
+        ChatMessage gm6 = new ChatMessage(groupChat, bob, "Bob needs to configure Docker containers and deployment scripts by Friday.", MessageType.CHAT);
+        gm6.setTimestamp(LocalDateTime.now().minusMinutes(15));
+        ChatMessage gm7 = new ChatMessage(groupChat, john, "John will write the WebSocket integration tests and update the README by next Monday.", MessageType.CHAT);
+        gm7.setTimestamp(LocalDateTime.now().minusMinutes(10));
+        ChatMessage gm8 = new ChatMessage(groupChat, alice, "Agreed! Let's schedule the final demo for Friday at 3 PM.", MessageType.CHAT);
+        gm8.setTimestamp(LocalDateTime.now().minusMinutes(5));
+
         messageRepository.save(gm1);
         messageRepository.save(gm2);
         messageRepository.save(gm3);
         messageRepository.save(gm4);
+        messageRepository.save(gm5);
+        messageRepository.save(gm6);
+        messageRepository.save(gm7);
+        messageRepository.save(gm8);
 
-        // 5. Default Notifications for John Doe
+        // 5. Seed Initial Action Items
+        ActionItem a1 = new ActionItem(groupChat, "Finish Spring AI integration & RAG pipeline",
+                "Integrate semantic context search and assistant endpoints.", alice, LocalDate.now().plusDays(1), ActionItemPriority.HIGH);
+        a1.setStatus(ActionItemStatus.IN_PROGRESS);
+
+        ActionItem a2 = new ActionItem(groupChat, "Configure Docker containers & deployment scripts",
+                "Setup Dockerfile, compose file, and production config.", bob, LocalDate.now().plusDays(3), ActionItemPriority.MEDIUM);
+        a2.setStatus(ActionItemStatus.PENDING);
+
+        ActionItem a3 = new ActionItem(groupChat, "Write WebSocket integration tests & docs",
+                "Verify STOMP frame delivery and WebRTC call flow.", john, LocalDate.now().plusDays(5), ActionItemPriority.MEDIUM);
+        a3.setStatus(ActionItemStatus.COMPLETED);
+
+        actionItemRepository.save(a1);
+        actionItemRepository.save(a2);
+        actionItemRepository.save(a3);
+
+        // 6. Seed Sample Meeting Summary
+        MeetingSummary ms = new MeetingSummary(
+                "call-" + groupChat.getId() + "-sync",
+                "Sprint 4 Planning & AI Architecture Sync",
+                "Alice: Let's discuss our AI collaboration roadmap.\n" +
+                "Bob: We should integrate Spring AI with RAG for chat history queries.\n" +
+                "John: Agreed. That will allow semantic search over past messages.\n" +
+                "Emma: We also need live audio/video transcription and automatic action item extraction.\n" +
+                "Alice: Approved. I will take RAG pipeline, Bob will handle containerization, and John will test WebSockets.",
+                "The team reviewed the Sprint 4 architectural plan. Consensus was reached to implement Spring AI, RAG chat assistant, automatic action item extraction, and WebRTC transcription notes.",
+                "Adopt Spring AI architecture with offline smart NLP fallback.\nSupport live Speech-to-Text transcript ingestion in WebRTC calls.\nPersist extracted action items to Kanban board.",
+                "Alice to finalize Spring AI endpoints by tomorrow.\nBob to setup container deployment by Friday.\nJohn to verify WebSocket STOMP test suite.",
+                john
+        );
+        meetingSummaryRepository.save(ms);
+
+        // 7. Default Notifications for John Doe
         Notification n1 = new Notification(john, alice, "New message from Alice Smith",
                 "Working on the Spring Boot agile project. It's looking amazing!",
                 "/chats?room=" + directJohnAlice.getId(), NotificationType.MESSAGE);

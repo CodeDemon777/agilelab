@@ -6,6 +6,7 @@ import com.agilelab.chatapp.model.User;
 import com.agilelab.chatapp.service.ChatService;
 import com.agilelab.chatapp.service.NotificationService;
 import com.agilelab.chatapp.service.UserService;
+import com.agilelab.chatapp.service.ai.AiService;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,11 +24,14 @@ public class ViewController {
     private final UserService userService;
     private final ChatService chatService;
     private final NotificationService notificationService;
+    private final AiService aiService;
 
-    public ViewController(UserService userService, ChatService chatService, NotificationService notificationService) {
+    public ViewController(UserService userService, ChatService chatService,
+                          NotificationService notificationService, AiService aiService) {
         this.userService = userService;
         this.chatService = chatService;
         this.notificationService = notificationService;
+        this.aiService = aiService;
     }
 
     private User getAuthenticatedUser() {
@@ -149,6 +153,22 @@ public class ViewController {
         }
 
         return "profile";
+    }
+
+    @GetMapping("/ai-workspace")
+    public String aiWorkspace(Model model, @RequestParam(value = "room", required = false) Long roomId) {
+        User user = getAuthenticatedUser();
+        if (user == null) return "redirect:/login";
+
+        addCommonAttributes(model, user);
+        List<ChatRoomDto> rooms = chatService.getUserChatRooms(user.getUsername());
+        model.addAttribute("rooms", rooms);
+        model.addAttribute("selectedRoomId", roomId);
+        model.addAttribute("insights", aiService.getWorkspaceInsights());
+        model.addAttribute("actionItems", aiService.getActionItems(roomId, null, null));
+        model.addAttribute("meetingSummaries", aiService.getAllMeetingSummaries());
+
+        return "ai-workspace";
     }
 }
 

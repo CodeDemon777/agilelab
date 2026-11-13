@@ -111,7 +111,39 @@
     <button id="btn-toggle-mic" class="btn-call-ctrl">Mute Mic</button>
     <button id="btn-toggle-cam" class="btn-call-ctrl" th:style="${callType == 'VIDEO'} ? 'display:inline-flex;' : 'display:none;'">Turn Cam Off</button>
     <button id="btn-screen-share" class="btn-call-ctrl secondary">Screen Share</button>
+    <button id="btn-toggle-transcript" class="btn-call-ctrl" style="background: linear-gradient(135deg, #0284c7, #06b6d4);">🎙️ Live AI Transcript</button>
+    <button id="btn-generate-notes" class="btn-call-ctrl" style="background: linear-gradient(135deg, #10b981, #059669);">✨ Meeting Notes</button>
     <button id="btn-end-call" class="btn-call-ctrl end-call">End Call</button>
+  </div>
+
+  <!-- Live Transcript Side Drawer -->
+  <div id="transcript-drawer" style="display:none; position:fixed; right:20px; top:80px; width:340px; max-height:calc(100vh - 200px); background:rgba(15, 23, 42, 0.9); backdrop-filter:blur(10px); border:1px solid rgba(0,191,255,0.3); border-radius:12px; z-index:35; color:white; padding:1rem; box-shadow:0 10px 30px rgba(0,0,0,0.5); overflow-y:auto;">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.15); padding-bottom:6px; margin-bottom:8px;">
+      <h4 style="margin:0; font-size:0.95rem; color:#38bdf8;">🎙️ Live AI Transcription</h4>
+      <button onclick="toggleTranscriptDrawer()" style="background:none; border:none; color:#94a3b8; font-size:1.2rem; cursor:pointer;">&times;</button>
+    </div>
+    <div id="transcript-feed" style="font-size:0.86rem; line-height:1.45; color:#e2e8f0; display:flex; flex-direction:column; gap:6px;">
+      <em style="color:#94a3b8;">Listening to call speech... (or type notes below)</em>
+    </div>
+    <div style="margin-top:10px; border-top:1px solid rgba(255,255,255,0.1); padding-top:8px;">
+      <input type="text" id="manual-transcript-input" placeholder="Type a meeting note..." style="width:100%; box-sizing:border-box; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:white; padding:6px 10px; font-size:0.82rem;" onkeydown="if(event.key==='Enter') appendManualTranscript()">
+    </div>
+  </div>
+
+  <!-- Meeting Notes Result Modal -->
+  <div id="modal-call-notes" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(6px); z-index:50; justify-content:center; align-items:center;">
+    <div style="background:white; border-radius:14px; max-width:600px; width:90%; padding:1.5rem; max-height:80vh; overflow-y:auto; box-shadow:0 20px 40px rgba(0,0,0,0.4);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #e2e8f0; padding-bottom:0.75rem;">
+        <h3 style="margin:0; font-size:1.2rem; color:#0f172a;">✨ Generated Meeting Minutes</h3>
+        <button onclick="closeCallNotesModal()" style="background:none; border:none; font-size:1.4rem; cursor:pointer;">&times;</button>
+      </div>
+      <div id="call-notes-content">
+        <p style="color:#64748b;">Processing transcript with AI... ⏳</p>
+      </div>
+      <div style="margin-top:1.5rem; text-align:right;">
+        <a href="/ai-workspace" class="btn-primary" style="background:#00bfff; text-decoration:none; display:inline-block; padding:0.5rem 1.25rem; font-weight:700;">Open in AI Workspace &rarr;</a>
+      </div>
+    </div>
   </div>
 
   <!-- Call Status Box -->

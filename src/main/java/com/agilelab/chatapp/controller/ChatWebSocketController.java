@@ -79,13 +79,21 @@ public class ChatWebSocketController {
 
         logger.info("WebSocket chat message from {} to room {}: {}", senderUsername, roomId, content);
 
-        MessageDto savedDto = chatService.saveMessage(roomId, senderUsername, content.trim(), type, fileUrl);
+        try {
+            MessageDto savedDto = chatService.saveMessage(roomId, senderUsername, content.trim(), type, fileUrl);
 
-        // 1. Broadcast to specific room topic for active participants
-        messagingTemplate.convertAndSend("/topic/room." + roomId, savedDto);
+            // 1. Broadcast to specific room topic for active participants
+            messagingTemplate.convertAndSend("/topic/room." + roomId, savedDto);
 
-        // 2. Broadcast to global messages topic for live chat list previews & unread updates
-        messagingTemplate.convertAndSend("/topic/messages", savedDto);
+            // 2. Broadcast to global messages topic for live chat list previews & unread updates
+            messagingTemplate.convertAndSend("/topic/messages", savedDto);
+        } catch (SecurityException se) {
+            logger.warn("WebSocket sendMessage rejected: {}", se.getMessage());
+            messagingTemplate.convertAndSendToUser(senderUsername, "/queue/errors",
+                    Map.of("error", "Forbidden", "message", se.getMessage()));
+        } catch (Exception e) {
+            logger.error("WebSocket sendMessage error: {}", e.getMessage());
+        }
     }
 
     @MessageMapping("/chat.typing")

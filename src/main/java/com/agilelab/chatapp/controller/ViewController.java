@@ -83,6 +83,7 @@ public class ViewController {
         if (user != null) {
             return "redirect:/chats";
         }
+        model.addAttribute("registerRequest", new com.agilelab.chatapp.dto.RegisterRequest());
         return "signup";
     }
 

@@ -196,6 +196,11 @@ public class ChatService {
         User sender = userRepository.findByUsernameIgnoreCase(senderUsername)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + senderUsername));
 
+        boolean isMember = participantRepository.existsByChatRoomAndUser(room, sender);
+        if (!isMember) {
+            throw new SecurityException("User '" + senderUsername + "' is not a member of chat room " + roomId);
+        }
+
         ChatMessage message = new ChatMessage(room, sender, content, type != null ? type : MessageType.CHAT);
         message.setFileUrl(fileUrl);
         ChatMessage saved = messageRepository.save(message);

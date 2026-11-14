@@ -75,6 +75,8 @@ public class SecurityConfig {
                     "/",
                     "/login",
                     "/signup",
+                    "/health",
+                    "/api/health",
                     "/api/auth/**",
                     "/css/**",
                     "/js/**",

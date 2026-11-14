@@ -164,7 +164,12 @@ const AppConfig = {
         resBox.innerText = 'Pinging backend... ⏳';
 
         try {
-            const res = await window.fetch(`${val}/api/auth/current`, { credentials: 'include' });
+            let res;
+            try {
+                res = await window.fetch(`${val}/api/health`, { method: 'GET', credentials: 'omit' });
+            } catch (err) {
+                res = await window.fetch(`${val}/api/auth/current`, { credentials: 'include' });
+            }
             if (res.ok || res.status === 401) {
                 resBox.style.color = '#10b981';
                 resBox.innerHTML = '✅ Backend is online & reachable!';

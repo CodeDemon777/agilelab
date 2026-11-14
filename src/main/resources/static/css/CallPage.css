@@ -1,45 +1,119 @@
-body {
-  margin: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: #f0f8ff;
+/* ==========================================================================
+   AgileLab WebRTC Video Huddle Styles (Cinematic Studio UI)
+   ========================================================================== */
+.call-body {
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #090d16;
+  color: #f8fafc;
+}
+
+.video-viewport {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 130px);
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  background: #020617;
 }
 
-.call-page {
-  text-align: center;
+#remote-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: #0f172a;
 }
 
-.call-controls {
-  margin-bottom: 2rem;
+#local-video {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  width: 240px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  background-color: #1e293b;
+  z-index: 20;
 }
 
-.btn-call {
-  padding: 1rem 2rem;
-  margin: 0 1rem;
-  border: none;
-  border-radius: 10px;
+.call-overlay-header {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.call-title-badge {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #f8fafc;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.call-controls-bar {
+  height: 70px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  padding: 0 1.5rem;
+  z-index: 30;
+}
+
+.btn-call-ctrl {
+  padding: 0.65rem 1.15rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: transform 0.3s;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #f8fafc;
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
-.video-call {
-  background-color: #ff6347;
-  color: white;
+.btn-call-ctrl:hover {
+  background-color: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.24);
+  transform: translateY(-1px);
 }
 
-.voice-call {
-  background-color: #00bfff;
-  color: white;
+.btn-call-ctrl.primary {
+  background-color: var(--primary);
+  border-color: var(--primary-hover);
 }
 
-.btn-call:hover {
-  transform: scale(1.1);
+.btn-call-ctrl.primary:hover {
+  background-color: var(--primary-hover);
 }
 
-.call-status p {
-  font-size: 1.2rem;
-  color: #666;
+.btn-call-ctrl.end-call {
+  background-color: var(--danger);
+  border-color: var(--danger-hover);
+}
+
+.btn-call-ctrl.end-call:hover {
+  background-color: var(--danger-hover);
 }

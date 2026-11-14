@@ -92,7 +92,7 @@ const AppConfig = {
             align-items: center;
             gap: 8px;
             box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-            border: 1px solid rgba(0, 191, 255, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             cursor: pointer;
             transition: all 0.2s ease;
         `;
@@ -100,7 +100,7 @@ const AppConfig = {
         indicator.innerHTML = `
             <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
             <span style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                Backend: <strong style="color: #38bdf8;">${this.getBackendUrl() ? new URL(this.getBackendUrl()).hostname : 'localhost'}</strong>
+                Backend: <strong style="color: #818cf8;">${this.getBackendUrl() ? new URL(this.getBackendUrl()).hostname : 'localhost'}</strong>
             </span>
             <span style="opacity: 0.7; font-size: 0.7rem;">⚙️</span>
         `;
@@ -140,7 +140,7 @@ const AppConfig = {
                         </button>
                         <div style="display:flex; gap:0.5rem;">
                             <button onclick="document.getElementById('config-backend-modal').style.display='none'" style="background:none; border:none; color:#64748b; cursor:pointer; font-weight:600;">Cancel</button>
-                            <button onclick="AppConfig.saveModalUrl()" style="background:#00bfff; color:white; border:none; padding:6px 16px; border-radius:6px; cursor:pointer; font-weight:700;">Save &amp; Reload</button>
+                            <button onclick="AppConfig.saveModalUrl()" style="background:#4f46e5; color:white; border:none; padding:6px 16px; border-radius:6px; cursor:pointer; font-weight:700;">Save &amp; Reload</button>
                         </div>
                     </div>
                 </div>

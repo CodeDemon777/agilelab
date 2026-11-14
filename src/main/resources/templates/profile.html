@@ -32,7 +32,7 @@
       transition: all 0.2s;
     }
     .avatar-option:hover, .avatar-option.selected {
-      border-color: #00bfff;
+      border-color: var(--primary);
       transform: scale(1.1);
     }
   </style>
@@ -61,7 +61,7 @@
 
       <!-- If viewing someone else's profile -->
       <div th:if="${!isSelf}" style="display: flex; gap: 0.75rem; justify-content: center;">
-        <button class="btn-edit-profile" style="background-color: #00bfff;"
+        <button class="btn-edit-profile" style="background-color: var(--primary);"
                 id="btn-profile-send-msg"
                 th:data-target-username="${profileUser.username}"
                 onclick="startDirectChat(this.getAttribute('data-target-username'))">
@@ -105,7 +105,7 @@
         </div>
         <input type="hidden" id="edit-avatar-url" th:value="${profileUser.avatarUrl}">
 
-        <button type="submit" class="btn-submit" style="width: 100%; margin-top: 0.5rem; background-color: #00bfff;">Save Changes</button>
+        <button type="submit" class="btn-submit" style="width: 100%; margin-top: 0.5rem;">Save Changes</button>
       </form>
     </div>
   </div>

@@ -17,41 +17,34 @@
       background: linear-gradient(135deg, #09172c 0%, #112a4d 60%, #1e3a6a 100%);
       color: white;
       border-radius: 16px;
-      padding: 2rem 2.5rem;
+      background: #0f172a;
+      color: #f8fafc;
+      border-radius: var(--radius-lg);
+      padding: 2rem 2.25rem;
       margin-bottom: 2rem;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(0, 191, 255, 0.25);
-    }
-    .ai-header-card::after {
-      content: "";
-      position: absolute;
-      top: -50px;
-      right: -50px;
-      width: 200px;
-      height: 200px;
-      background: radial-gradient(circle, rgba(0, 191, 255, 0.25) 0%, transparent 70%);
-      border-radius: 50%;
     }
     .ai-header-title {
-      font-size: 2rem;
+      font-size: 1.85rem;
       font-weight: 800;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.03em;
       margin: 0 0 0.5rem;
       display: flex;
       align-items: center;
       gap: 12px;
+      color: #ffffff;
     }
     .ai-sparkle-badge {
-      background: linear-gradient(135deg, #00bfff, #38ef7d);
-      color: #051426;
-      font-size: 0.8rem;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 0.72rem;
       font-weight: 700;
-      padding: 4px 12px;
-      border-radius: 20px;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.05em;
     }
     .ai-header-subtitle {
       font-size: 1.05rem;
@@ -199,7 +192,7 @@
       line-height: 1.55;
     }
     .rag-msg.user .rag-bubble {
-      background: #00bfff;
+      background: var(--primary);
       color: white;
       border-bottom-right-radius: 3px;
     }
@@ -460,7 +453,7 @@
           </p>
         </div>
         <div>
-          <button class="btn-primary" style="background:#00bfff; font-weight:700;" onclick="openNewActionItemModal()">
+          <button class="btn btn-primary" onclick="openNewActionItemModal()">
             + Add Action Item
           </button>
         </div>
@@ -513,8 +506,8 @@
       <div class="rag-chat-wrapper">
         <div class="rag-chat-header">
           <div style="display:flex; align-items:center; gap:10px;">
-            <div style="width:36px; height:36px; border-radius:50%; background:#00bfff; display:flex; align-items:center; justify-content:center; color:white; font-size:1.2rem;">
-              🤖
+            <div style="width:34px; height:34px; border-radius:8px; background:var(--primary); display:flex; align-items:center; justify-content:center; color:white; font-size:1.05rem;">
+              ⚡
             </div>
             <div>
               <h3 style="margin:0; font-size:1.05rem; font-weight:700; color:#0f172a;">AgileLab Assistant (RAG Pipeline)</h3>
@@ -560,8 +553,8 @@
         <!-- Input Bar -->
         <div class="rag-input-box">
           <input type="text" id="rag-query-input" class="input-field" style="margin:0;" placeholder="Ask anything about your team chats, tasks, or decisions..." onkeydown="if(event.key==='Enter') submitRagQuery()">
-          <button id="btn-rag-submit" class="btn-primary" style="background:#00bfff; font-weight:700; white-space:nowrap; padding:0 1.5rem;" onclick="submitRagQuery()">
-            Ask AI ✨
+          <button id="btn-rag-submit" class="btn btn-primary" style="white-space:nowrap; padding:0 1.5rem;" onclick="submitRagQuery()">
+            Ask Assistant
           </button>
         </div>
       </div>
@@ -647,7 +640,7 @@
     <div id="tab-meetings" class="ai-tab-pane">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
         <h3 style="margin:0; font-size:1.2rem; font-weight:700; color:#0f172a;">AI-Generated Meeting Minutes</h3>
-        <button class="btn-primary" style="background:#00bfff; font-weight:700;" onclick="openNewMeetingNotesModal()">
+        <button class="btn btn-primary" onclick="openNewMeetingNotesModal()">
           + Ingest Transcript / Notes
         </button>
       </div>
@@ -725,8 +718,8 @@
         </div>
 
         <div style="margin-top:1rem; text-align:right;">
-          <button class="btn-primary" style="background:#00bfff; font-weight:700; padding:0.6rem 1.8rem;" onclick="performTranslation()">
-            Translate Message ✨
+          <button class="btn btn-primary" style="padding:0.6rem 1.8rem;" onclick="performTranslation()">
+            Translate Message
           </button>
         </div>
       </div>
@@ -841,7 +834,7 @@
 
           <div style="margin-top:1.5rem; display:flex; justify-content:flex-end; gap:0.75rem;">
             <button type="button" class="btn-cancel" onclick="closeModal('modal-action-item')">Cancel</button>
-            <button type="submit" class="btn-submit" style="background:#00bfff;">Save Task</button>
+            <button type="submit" class="btn-submit">Save Task</button>
           </div>
         </form>
       </div>
@@ -865,7 +858,7 @@
 
           <div style="margin-top:1.5rem; display:flex; justify-content:flex-end; gap:0.75rem;">
             <button type="button" class="btn-cancel" onclick="closeModal('modal-meeting-notes')">Cancel</button>
-            <button type="submit" class="btn-submit" style="background:#00bfff;">Generate AI Summary ✨</button>
+            <button type="submit" class="btn-submit">Generate AI Summary</button>
           </div>
         </form>
       </div>

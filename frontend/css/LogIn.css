@@ -1,56 +1,95 @@
-body {
-  margin: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: #e6e6e6;
+/* ==========================================================================
+   AgileLab Authentication Card Styles (Clean Modern Auth)
+   ========================================================================== */
+.login-page-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: calc(100vh - 65px);
+  padding: 2rem 1rem;
+  background-color: var(--bg-page);
 }
 
-.form-page {
-  text-align: center;
-  background-color: #fff;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  animation: slideIn 1s ease-in-out;
-}
-
-.form-title {
-  font-size: 2rem;
-  color: #333;
-}
-
-.input-field {
-  display: block;
+.login-card {
+  background-color: #ffffff;
   width: 100%;
-  margin: 1rem 0;
-  padding: 1rem;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  max-width: 420px;
+  padding: 2.25rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  animation: cardFadeIn 0.25s ease-out;
+}
+
+.login-title {
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.login-subtitle {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin: 0.35rem 0 0;
+  line-height: 1.4;
+}
+
+.form-group {
+  margin-bottom: 1.15rem;
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-body);
+  margin-bottom: 0.35rem;
 }
 
 .btn-submit {
-  background-color: #00bfff;
+  width: 100%;
+  background-color: var(--primary);
   color: white;
-  padding: 1rem 2rem;
+  padding: 0.75rem 1rem;
   border: none;
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s;
+  box-shadow: 0 1px 2px rgba(79, 70, 229, 0.2);
+  transition: all 0.15s ease;
 }
 
 .btn-submit:hover {
-  background-color: #008cba;
+  background-color: var(--primary-hover);
+  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
 }
 
-.alternate-option {
-  margin-top: 1rem;
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-/* Animations */
-@keyframes slideIn {
-  from { transform: translateY(100px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+.demo-box {
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.demo-title {
+  margin: 0 0 0.45rem 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }

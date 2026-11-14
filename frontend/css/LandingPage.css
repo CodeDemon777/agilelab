@@ -1,80 +1,132 @@
-body {
-  margin: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: #f0f8ff;
-}
-
+/* ==========================================================================
+   AgileLab Landing Page Styles (High-Conversion Human-Engineered UI)
+   ========================================================================== */
 .landing-page {
-  text-align: center;
-  height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: calc(100vh - 65px);
   justify-content: space-between;
 }
 
 .hero-section {
-  margin-top: 10%;
+  max-width: 960px;
+  margin: 3.5rem auto 2rem;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  background: var(--primary-light);
+  border: 1px solid #c7d2fe;
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.01em;
 }
 
 .tagline {
-  font-size: 3rem;
-  color: #2d2d2d;
-  animation: fadeIn 1s ease-in-out;
+  font-size: 3.25rem;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0 0 1.25rem;
+}
+
+.tagline-gradient {
+  background: linear-gradient(135deg, var(--text-main) 30%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .overview {
-  margin-top: 1rem;
-  color: #666;
-  animation: fadeIn 2s ease-in-out;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  max-width: 680px;
+  margin: 0 auto 2.25rem;
 }
 
 .cta-buttons {
-  margin-top: 2rem;
-}
-
-.btn {
-  text-decoration: none;
-  padding: 0.8rem 2rem;
-  margin: 0 1rem;
-  border-radius: 5px;
-  color: white;
-  font-size: 1.2rem;
-  transition: background-color 0.3s ease-in-out;
-}
-
-.btn-signup {
-  background-color: #00bfff;
-}
-
-.btn-login {
-  background-color: #ff6347;
-}
-
-.btn:hover {
-  background-color: #008cba;
-}
-
-.footer-links {
-  list-style: none;
-  padding: 0;
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3.5rem;
+  flex-wrap: wrap;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  margin-top: 1rem;
+  text-align: left;
 }
 
-.footer-links li a {
-  text-decoration: none;
-  color: #444;
-  transition: color 0.3s;
+.feature-card {
+  background: #ffffff;
+  padding: 1.5rem 1.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
 }
 
-.footer-links li a:hover {
-  color: #ff6347;
+.feature-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-hover);
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.feature-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-light);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.feature-title {
+  font-size: 1.08rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+  margin: 0 0 0.5rem 0;
+}
+
+.feature-desc {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.footer-section {
+  border-top: 1px solid var(--border-color);
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-light);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .tagline {
+    font-size: 2.3rem;
+  }
+  .overview {
+    font-size: 1rem;
+  }
 }

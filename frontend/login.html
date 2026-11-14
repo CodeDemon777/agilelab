@@ -3,54 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - AgileLab</title>
-  <link rel="stylesheet" href="/css/LogIn.css">
+  <title>Log In - AgileLab</title>
   <link rel="stylesheet" href="/css/app.css">
+  <link rel="stylesheet" href="/css/LogIn.css">
 </head>
-<body style="display:flex; justify-content:center; align-items:center; min-height:100vh; background-color: var(--bg-page);">
-  <div class="login-card">
-    <div style="text-align: center; margin-bottom: 1.5rem;">
-      <a href="/index.html" class="brand-container" style="justify-content: center; margin-bottom: 0.5rem;">
-        <div class="brand-logo">💬</div>
-        <span class="brand-name">AgileLab</span>
-      </a>
-      <h2 class="login-title" style="margin: 0; font-size: 1.5rem;">Welcome Back</h2>
-      <p style="color: #64748b; font-size: 0.88rem; margin: 4px 0 0;">Log in to access your chats &amp; AI workspace</p>
-    </div>
-
-    <!-- Alert Box -->
-    <div id="login-alert" class="alert error" style="display:none;"></div>
-
-    <!-- Demo Credentials Quick-Fill -->
-    <div style="background-color: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 0.75rem; margin-bottom: 1.25rem;">
-      <p style="margin: 0 0 0.4rem 0; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase;">1-Click Demo Login:</p>
-      <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
-        <button type="button" class="demo-user-pill" onclick="quickFill('johndoe')">👤 John Doe</button>
-        <button type="button" class="demo-user-pill" onclick="quickFill('alice')">👩 Alice</button>
-        <button type="button" class="demo-user-pill" onclick="quickFill('bob')">👨 Bob</button>
-        <button type="button" class="demo-user-pill" onclick="quickFill('emma')">👩 Emma</button>
-      </div>
-    </div>
-
-    <!-- Login Form -->
-    <form id="login-form" onsubmit="handleLogin(event)">
-      <div style="margin-bottom: 1rem;">
-        <label for="username" style="display: block; font-weight: 600; font-size: 0.85rem; color: #334155; margin-bottom: 4px;">Username or Email</label>
-        <input type="text" id="username" class="input-field" placeholder="Enter username..." required autofocus style="margin: 0;">
+<body>
+  <div class="login-page-container">
+    <div class="login-card">
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <a href="/index.html" class="brand-container" style="justify-content: center; margin-bottom: 0.75rem;">
+          <div class="brand-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              <path d="M8 10h.01"></path>
+              <path d="M12 10h.01"></path>
+              <path d="M16 10h.01"></path>
+            </svg>
+          </div>
+          <span class="brand-name">AgileLab</span>
+        </a>
+        <h2 class="login-title">Welcome Back</h2>
+        <p class="login-subtitle">Sign in to access your team chat and sprint intelligence.</p>
       </div>
 
-      <div style="margin-bottom: 1.5rem;">
-        <label for="password" style="display: block; font-weight: 600; font-size: 0.85rem; color: #334155; margin-bottom: 4px;">Password</label>
-        <input type="password" id="password" class="input-field" placeholder="••••••••" required style="margin: 0;">
+      <!-- Alert Box -->
+      <div id="login-alert" class="alert error" style="display:none;"></div>
+
+      <!-- 1-Click Demo Credentials -->
+      <div class="demo-box">
+        <p class="demo-title">⚡ 1-Click Instant Demo Login:</p>
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+          <button type="button" class="demo-user-pill" onclick="quickFill('johndoe')">John Doe</button>
+          <button type="button" class="demo-user-pill" onclick="quickFill('alice')">Alice</button>
+          <button type="button" class="demo-user-pill" onclick="quickFill('bob')">Bob</button>
+          <button type="button" class="demo-user-pill" onclick="quickFill('emma')">Emma</button>
+        </div>
       </div>
 
-      <button type="submit" id="btn-login-submit" class="btn-submit" style="width: 100%; padding: 0.75rem; font-weight: 700;">
-        Log In
-      </button>
-    </form>
+      <!-- Login Form -->
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="username" class="form-label">Username or Email</label>
+          <input type="text" id="username" class="input-field" placeholder="Enter username or email..." required autofocus>
+        </div>
 
-    <div style="text-align: center; margin-top: 1.5rem; font-size: 0.88rem; color: #64748b;">
-      Don't have an account? <a href="/signup.html" style="color: var(--primary); font-weight: 600; text-decoration: none;">Sign Up</a>
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.35rem;">
+            <label for="password" class="form-label" style="margin: 0;">Password</label>
+            <span style="font-size: 0.78rem; color: var(--text-light);">demo: password123</span>
+          </div>
+          <input type="password" id="password" class="input-field" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" id="btn-login-submit" class="btn-submit">
+          Sign In
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1.5rem; font-size: 0.88rem; color: var(--text-muted);">
+        Don't have an account? <a href="/signup.html" style="color: var(--primary); font-weight: 600; text-decoration: none;">Create one free</a>
+      </div>
     </div>
   </div>
 
@@ -70,7 +82,7 @@
       const submitBtn = document.getElementById('btn-login-submit');
 
       alertBox.style.display = 'none';
-      submitBtn.innerText = 'Logging in... ⏳';
+      submitBtn.innerText = 'Signing in...';
       submitBtn.disabled = true;
 
       try {
@@ -85,17 +97,16 @@
         } else {
           alertBox.innerText = data.message || 'Invalid username or password.';
           alertBox.style.display = 'block';
-          submitBtn.innerText = 'Log In';
+          submitBtn.innerText = 'Sign In';
           submitBtn.disabled = false;
         }
       } catch (err) {
-        alertBox.innerText = 'Could not connect to backend. Please check your connection.';
+        alertBox.innerText = 'Could not connect to backend. Please check connection.';
         alertBox.style.display = 'block';
-        submitBtn.innerText = 'Log In';
+        submitBtn.innerText = 'Sign In';
         submitBtn.disabled = false;
       }
     }
   </script>
 </body>
 </html>
-

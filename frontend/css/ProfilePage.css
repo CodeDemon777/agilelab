@@ -1,61 +1,69 @@
-body {
-  margin: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: #f0f0f0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.profile-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* ==========================================================================
+   AgileLab Profile Settings Styles
+   ========================================================================== */
+.profile-container {
+  max-width: 620px;
+  margin: 3rem auto;
+  padding: 0 1.25rem;
 }
 
 .profile-card {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 10px;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  padding: 2.5rem;
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  animation: zoomIn 1s ease-in-out;
 }
 
-.profile-img {
+.profile-avatar-big {
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
-  width: 150px;
-  height: 150px;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 2px var(--border-color), var(--shadow-md);
+  object-fit: cover;
   margin-bottom: 1rem;
 }
 
-.user-name {
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
+.profile-display-name {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
 }
 
-.user-status {
-  font-size: 1.2rem;
-  color: #666;
-  margin-bottom: 1.5rem;
+.profile-display-username {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 3px 0 0;
 }
 
-.btn-edit-profile {
-  background-color: #ff6347;
-  color: white;
-  padding: 0.8rem 2rem;
-  border-radius: 5px;
+.profile-display-quote {
+  margin: 0.75rem 0 1.5rem;
+  font-style: italic;
+  color: var(--text-body);
+  font-size: 0.92rem;
+  background: var(--bg-subtle);
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+}
+
+.avatar-preset-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid transparent;
   cursor: pointer;
-  transition: background-color 0.3s;
+  padding: 2px;
+  background: var(--bg-subtle);
+  transition: transform 0.15s, border-color 0.15s;
 }
 
-.btn-edit-profile:hover {
-  background-color: #e55347;
-}
-
-/* Animations */
-@keyframes zoomIn {
-  from { transform: scale(0.5); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+.avatar-preset-btn:hover {
+  transform: scale(1.08);
+  border-color: var(--primary);
 }

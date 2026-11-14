@@ -3,112 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile - AgileLab</title>
-  <link rel="stylesheet" href="/css/ProfilePage.css">
+  <title>Profile Settings - AgileLab</title>
   <link rel="stylesheet" href="/css/app.css">
-  <style>
-    .profile-card {
-      background: #ffffff;
-      border-radius: 16px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-      padding: 2.5rem;
-      max-width: 580px;
-      margin: 2.5rem auto;
-      text-align: center;
-    }
-    .profile-avatar-big {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: 4px solid var(--primary);
-      object-fit: cover;
-      margin-bottom: 1rem;
-      box-shadow: 0 4px 12px rgba(0, 191, 255, 0.25);
-    }
-    .avatar-preset-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      cursor: pointer;
-      padding: 0;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-    .avatar-preset-btn:hover {
-      transform: scale(1.1);
-      border-color: var(--primary);
-    }
-  </style>
+  <link rel="stylesheet" href="/css/ProfilePage.css">
 </head>
 <body>
   <!-- Navigation Header -->
   <nav class="app-navbar">
     <a href="/index.html" class="brand-container">
-      <div class="brand-logo">💬</div>
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          <path d="M8 10h.01"></path>
+          <path d="M12 10h.01"></path>
+          <path d="M16 10h.01"></path>
+        </svg>
+      </div>
       <span class="brand-name">AgileLab</span>
+      <span class="brand-badge">PRO</span>
     </a>
     <ul class="nav-links">
       <li><a href="/chats.html" class="nav-link"><span>💬 Chats</span></a></li>
-      <li><a href="/ai-workspace.html" class="nav-link ai-nav-pill"><span>✨ AI Workspace</span></a></li>
+      <li><a href="/ai-workspace.html" class="nav-link ai-nav-pill"><span>⚡ AI Intelligence</span></a></li>
       <li><a href="/notifications.html" class="nav-link"><span>🔔 Notifications</span></a></li>
     </ul>
-    <div style="display:flex; align-items:center; gap: 1rem;">
+    <div style="display:flex; align-items:center; gap: 0.75rem;">
       <button onclick="App.logout()" class="nav-logout-btn">Log Out</button>
     </div>
   </nav>
 
-  <div class="profile-card">
-    <img id="profile-display-avatar" src="/images/default-avatar.svg" class="profile-avatar-big" alt="User Avatar">
-    <h2 id="profile-display-name" style="margin: 0; font-size: 1.6rem; color: #1e293b;">Loading Profile...</h2>
-    <p id="profile-display-username" style="color: #64748b; font-size: 0.95rem; margin: 4px 0 0;">@username</p>
-    <p id="profile-display-quote" style="margin: 0.75rem 0 1.5rem; font-style: italic; color: #475569; font-size: 0.95rem;">"Living the dream"</p>
+  <div class="profile-container">
+    <div class="profile-card">
+      <img id="profile-display-avatar" src="/images/default-avatar.svg" class="profile-avatar-big" alt="User Avatar">
+      <h2 id="profile-display-name" class="profile-display-name">Loading Profile...</h2>
+      <p id="profile-display-username" class="profile-display-username">@username</p>
+      <p id="profile-display-quote" class="profile-display-quote">"Living the dream"</p>
 
-    <div id="profile-save-alert" style="display:none; padding:8px 12px; border-radius:6px; margin-bottom:1rem; font-size:0.88rem;"></div>
+      <div id="profile-save-alert" style="display:none; padding:8px 12px; border-radius:var(--radius-sm); margin-bottom:1rem; font-size:0.88rem;"></div>
 
-    <form id="profile-form" onsubmit="saveProfile(event)" style="text-align: left; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
-      <div style="margin-bottom: 1.25rem;">
-        <label style="font-weight: 600; font-size: 0.88rem; color: #334155; display:block; margin-bottom: 4px;">Full Name</label>
-        <input type="text" id="input-full-name" class="input-field" required style="margin: 0;">
-      </div>
-
-      <div style="margin-bottom: 1.25rem;">
-        <label style="font-weight: 600; font-size: 0.88rem; color: #334155; display:block; margin-bottom: 4px;">Status Quote / Headline</label>
-        <input type="text" id="input-status-quote" class="input-field" placeholder="e.g. Building great things 🚀" style="margin: 0;">
-      </div>
-
-      <div style="margin-bottom: 1.5rem;">
-        <label style="font-weight: 600; font-size: 0.88rem; color: #334155; display:block; margin-bottom: 6px;">Choose Avatar Preset</label>
-        <div style="display: flex; gap: 0.6rem; margin-bottom: 0.6rem; flex-wrap: wrap;">
-          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=JohnDoe" class="avatar-preset-btn" onclick="selectAvatar(this.src)">
-          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Alice" class="avatar-preset-btn" onclick="selectAvatar(this.src)">
-          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Bob" class="avatar-preset-btn" onclick="selectAvatar(this.src)">
-          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Emma" class="avatar-preset-btn" onclick="selectAvatar(this.src)">
-          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Felix" class="avatar-preset-btn" onclick="selectAvatar(this.src)">
+      <form id="profile-form" onsubmit="saveProfile(event)" style="text-align: left; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" id="input-full-name" class="input-field" required>
         </div>
-        <input type="text" id="input-avatar-url" class="input-field" placeholder="Or paste custom image/avatar URL..." style="margin: 0;">
-      </div>
 
-      <button type="submit" id="btn-save-profile" class="btn-submit" style="width: 100%; padding: 0.75rem; font-weight: 700; background: #00bfff;">
-        Save Changes
-      </button>
-    </form>
+        <div class="form-group">
+          <label class="form-label">Status Quote / Headline</label>
+          <input type="text" id="input-status-quote" class="input-field" placeholder="e.g. Architecting real-time distributed systems 🚀">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label class="form-label">Choose Avatar Preset</label>
+          <div style="display: flex; gap: 0.65rem; margin-bottom: 0.65rem; flex-wrap: wrap;">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=JohnDoe" class="avatar-preset-btn" onclick="selectAvatar(this.src)" alt="Preset 1">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Alice" class="avatar-preset-btn" onclick="selectAvatar(this.src)" alt="Preset 2">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Bob" class="avatar-preset-btn" onclick="selectAvatar(this.src)" alt="Preset 3">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Emma" class="avatar-preset-btn" onclick="selectAvatar(this.src)" alt="Preset 4">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Felix" class="avatar-preset-btn" onclick="selectAvatar(this.src)" alt="Preset 5">
+          </div>
+          <input type="text" id="input-avatar-url" class="input-field" placeholder="Or paste custom image/avatar URL...">
+        </div>
+
+        <button type="submit" id="btn-save-profile" class="btn-submit">
+          Save Changes
+        </button>
+      </form>
+    </div>
   </div>
 
   <script src="/js/config.js"></script>
   <script src="/js/app.js"></script>
   <script>
-    let user = null;
+    let currentProfile = null;
 
-    async function loadProfile() {
+    async function loadUserProfile() {
       try {
         const res = await AppConfig.fetch('/api/auth/current');
         if (res.ok) {
-          user = await res.json();
-          document.getElementById('profile-display-avatar').src = user.avatarUrl || '/images/default-avatar.svg';
+          const user = await res.json();
+          currentProfile = user;
           document.getElementById('profile-display-name').innerText = user.fullName || user.username;
           document.getElementById('profile-display-username').innerText = '@' + user.username;
-          document.getElementById('profile-display-quote').innerText = `"${user.statusQuote || 'Living the dream'}"`;
+          document.getElementById('profile-display-quote').innerText = user.statusQuote ? `"${user.statusQuote}"` : '"Collaborating on AgileLab"';
+          if (user.avatarUrl) {
+            document.getElementById('profile-display-avatar').src = user.avatarUrl;
+          }
 
           document.getElementById('input-full-name').value = user.fullName || '';
           document.getElementById('input-status-quote').value = user.statusQuote || '';
@@ -128,37 +107,40 @@
       const statusQuote = document.getElementById('input-status-quote').value.trim();
       const avatarUrl = document.getElementById('input-avatar-url').value.trim();
       const alertBox = document.getElementById('profile-save-alert');
-      const submitBtn = document.getElementById('btn-save-profile');
+      const saveBtn = document.getElementById('btn-save-profile');
 
-      submitBtn.innerText = 'Saving... ⏳';
+      saveBtn.disabled = true;
+      saveBtn.innerText = 'Saving...';
+      alertBox.style.display = 'none';
 
       try {
         const res = await AppConfig.fetch('/api/users/profile', {
           method: 'POST',
           body: JSON.stringify({ fullName, statusQuote, avatarUrl })
         });
-        const data = await res.json();
-        if (res.ok && data.success) {
-          alertBox.style.display = 'block';
-          alertBox.style.background = '#dcfce7';
-          alertBox.style.color = '#15803d';
+        if (res.ok) {
+          alertBox.className = 'alert success';
           alertBox.innerText = 'Profile saved successfully! ✨';
-          submitBtn.innerText = 'Save Changes';
-          loadProfile();
-        } else {
           alertBox.style.display = 'block';
-          alertBox.style.background = '#fee2e2';
-          alertBox.style.color = '#b91c1c';
-          alertBox.innerText = data.message || 'Failed to update profile.';
-          submitBtn.innerText = 'Save Changes';
+          loadUserProfile();
+        } else {
+          alertBox.className = 'alert error';
+          alertBox.innerText = 'Failed to save profile.';
+          alertBox.style.display = 'block';
         }
-      } catch (err) {
-        submitBtn.innerText = 'Save Changes';
+      } catch (e) {
+        alertBox.className = 'alert error';
+        alertBox.innerText = 'Network error saving profile.';
+        alertBox.style.display = 'block';
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerText = 'Save Changes';
       }
     }
 
-    document.addEventListener('DOMContentLoaded', () => loadProfile());
+    document.addEventListener('DOMContentLoaded', () => {
+      loadUserProfile();
+    });
   </script>
 </body>
 </html>
-

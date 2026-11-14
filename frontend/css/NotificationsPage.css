@@ -1,29 +1,76 @@
-body {
-  margin: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: #f8f9fa;
-}
-
+/* ==========================================================================
+   AgileLab Notifications Page Styles
+   ========================================================================== */
 .notifications-page {
-  padding: 2rem;
+  max-width: 720px;
+  margin: 2.5rem auto;
+  width: 100%;
+  padding: 0 1.25rem;
 }
 
-.notifications-list {
-  list-style-type: none;
-  padding: 0;
+.notifications-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
-.notification {
-  background-color: #fff;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  animation: slideIn 0.5s ease-in-out;
+.notifications-title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text-main);
 }
 
-/* Animations */
-@keyframes slideIn {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
+.btn-mark-all {
+  background: white;
+  border: 1px solid var(--border-color);
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: all 0.15s ease;
+}
+
+.btn-mark-all:hover {
+  background: var(--bg-subtle);
+  color: var(--text-main);
+  border-color: var(--border-hover);
+}
+
+.notification-card {
+  cursor: pointer;
+  background: white;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 0.65rem;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-xs);
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.notification-card:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--border-hover);
+}
+
+.notification-card.unread {
+  background-color: var(--primary-light);
+  border-color: #c7d2fe;
+}
+
+.notification-card.unread::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  background-color: var(--primary);
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
 }

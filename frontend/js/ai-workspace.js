@@ -442,7 +442,7 @@ function formatMarkdown(text) {
     let html = escapeHtml(text);
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    html = html.replace(/^&gt; (.*$)/gim, '<blockquote style="border-left: 3px solid #00bfff; padding-left: 8px; margin: 4px 0; color: #475569;">$1</blockquote>');
+    html = html.replace(/^&gt; (.*$)/gim, '<blockquote style="border-left: 3px solid #4f46e5; padding-left: 8px; margin: 4px 0; color: #475569;">$1</blockquote>');
     html = html.replace(/\n/g, '<br>');
     return html;
 }

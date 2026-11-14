@@ -3,28 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AgileLab - AI-Powered Real-Time Collaboration</title>
-  <link rel="stylesheet" href="/css/LandingPage.css">
+  <title>AgileLab - Intelligent Team Collaboration</title>
   <link rel="stylesheet" href="/css/app.css">
+  <link rel="stylesheet" href="/css/LandingPage.css">
 </head>
 <body>
   <!-- Navigation Header -->
   <nav class="app-navbar">
     <a href="/index.html" class="brand-container">
-      <div class="brand-logo">💬</div>
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          <path d="M8 10h.01"></path>
+          <path d="M12 10h.01"></path>
+          <path d="M16 10h.01"></path>
+        </svg>
+      </div>
       <span class="brand-name">AgileLab</span>
+      <span class="brand-badge">PRO</span>
     </a>
     <ul class="nav-links">
       <li><a href="/chats.html" class="nav-link"><span>💬 Chats</span></a></li>
-      <li><a href="/ai-workspace.html" class="nav-link ai-nav-pill"><span>✨ AI Workspace</span></a></li>
+      <li><a href="/ai-workspace.html" class="nav-link ai-nav-pill"><span>⚡ AI Intelligence</span></a></li>
       <li><a href="/notifications.html" class="nav-link"><span>🔔 Notifications</span></a></li>
     </ul>
-    <div style="display:flex; align-items:center; gap: 1rem;">
-      <a href="/login.html" id="navbar-login-btn" class="btn btn-login" style="padding: 0.4rem 1rem; font-size: 0.88rem;">Log In</a>
+    <div style="display:flex; align-items:center; gap: 0.75rem;">
+      <a href="/login.html" id="navbar-login-btn" class="btn btn-secondary" style="padding: 0.45rem 1rem; font-size: 0.88rem;">Log In</a>
+      <a href="/signup.html" id="navbar-signup-btn" class="btn btn-primary" style="padding: 0.45rem 1rem; font-size: 0.88rem;">Get Started</a>
       <div id="navbar-user-profile" style="display:none; align-items:center; gap: 0.6rem;">
         <a href="/profile.html" class="user-nav-profile">
-          <img id="navbar-user-avatar" src="/images/default-avatar.svg" class="nav-avatar" style="width:30px; height:30px; border-radius:50%;">
-          <span id="navbar-user-name" style="font-weight:600; font-size:0.9rem;">User</span>
+          <img id="navbar-user-avatar" src="/images/default-avatar.svg" class="nav-avatar" alt="Avatar">
+          <span id="navbar-user-name">User</span>
         </a>
         <button onclick="App.logout()" class="nav-logout-btn">Log Out</button>
       </div>
@@ -33,36 +42,71 @@
 
   <div class="landing-page">
     <header class="hero-section">
-      <div style="margin-bottom: 1.5rem;">
-        <span style="font-size: 3.5rem;">💬</span>
+      <div class="hero-pill">
+        <span style="font-size: 0.85rem;">⚡</span> Powered by Spring Boot 3.4 &amp; STOMP WebSockets
       </div>
-      <h1 class="tagline">Connect. Chat. Collaborate.</h1>
-      <p class="overview">Enterprise-grade collaboration platform powered by real-time STOMP WebSockets, peer-to-peer WebRTC video calls, and an Autonomous AI Assistant for smart sprint automation.</p>
+
+      <h1 class="tagline">Where agile engineering meets <span class="tagline-gradient">real-time collaboration</span>.</h1>
+
+      <p class="overview">
+        Streamline high-velocity team messaging, crystal-clear WebRTC video huddles, and autonomous sprint intelligence — built with enterprise Java architecture and a clean, human-crafted design system.
+      </p>
 
       <div class="cta-buttons">
-        <a href="/signup.html" class="btn btn-signup">Sign Up</a>
-        <a href="/login.html" class="btn btn-login">Log In</a>
-        <a href="/ai-workspace.html" class="btn" style="background: linear-gradient(135deg, #0284c7, #10b981); color:white; font-weight:700;">✨ Explore AI Workspace</a>
+        <a href="/signup.html" class="btn btn-primary" style="padding: 0.75rem 1.6rem; font-size: 0.98rem;">
+          Get Started Free
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+        <a href="/login.html" class="btn btn-secondary" style="padding: 0.75rem 1.4rem; font-size: 0.98rem;">Sign In</a>
+        <a href="/ai-workspace.html" class="btn" style="background: var(--ai-light); color: var(--ai-text); border: 1px solid var(--ai-border); font-weight: 600; padding: 0.75rem 1.4rem;">
+          ⚡ Explore AI Workspace
+        </a>
       </div>
 
-      <div style="margin-top: 3.5rem; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
-        <div style="background: white; padding: 1.25rem 1.75rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); max-width: 260px; text-align: left;">
-          <h3 style="margin: 0 0 8px 0; color: #00bfff;">⚡ Instant Chat</h3>
-          <p style="margin: 0; color: #666; font-size: 0.88rem;">STOMP WebSockets with instant dual-panel delivery, live typing indicators, and user presence.</p>
+      <!-- Feature Grid -->
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Real-Time STOMP Chat</h3>
+          <p class="feature-desc">Sub-millisecond dual-panel messaging with live typing signals, unread badges, presence tracking, and synchronized read receipts.</p>
         </div>
-        <div style="background: white; padding: 1.25rem 1.75rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); max-width: 260px; text-align: left;">
-          <h3 style="margin: 0 0 8px 0; color: #ff6347;">📹 WebRTC Calls</h3>
-          <p style="margin: 0; color: #666; font-size: 0.88rem;">Peer-to-peer audio &amp; video calls with screen share, live Speech-to-Text transcription, and notes.</p>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrapper" style="background: #f0fdf4; color: #16a34a;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7"></polygon>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+            </svg>
+          </div>
+          <h3 class="feature-title">Peer-to-Peer WebRTC Calls</h3>
+          <p class="feature-desc">Ultra-low latency 1:1 voice &amp; video calling with screen sharing, background noise suppression, and speech-to-text meeting notes.</p>
         </div>
-        <div style="background: white; padding: 1.25rem 1.75rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); max-width: 260px; text-align: left;">
-          <h3 style="margin: 0 0 8px 0; color: #10b981;">✨ Smart AI Assistant</h3>
-          <p style="margin: 0; color: #666; font-size: 0.88rem;">RAG semantic search across past chats, automated task extraction &amp; Kanban, and discussion summaries.</p>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrapper" style="background: var(--ai-light); color: var(--ai-text);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Sprint &amp; RAG Intelligence</h3>
+          <p class="feature-desc">Automatic action-item extraction to Kanban, semantic chat history retrieval, discussion executive summaries, and multi-language translation.</p>
         </div>
       </div>
     </header>
 
-    <footer>
-      <p style="color: #999; font-size: 0.85rem; margin-top: 1rem;">AgileLab Full-Stack Collaboration Platform &copy; 2026</p>
+    <footer class="footer-section">
+      <div>AgileLab Full-Stack Collaboration Platform &copy; 2026</div>
+      <div style="display:flex; gap: 1.25rem;">
+        <span>Java 21</span>
+        <span>Spring Boot 3.4</span>
+        <span>WebRTC</span>
+        <span>STOMP</span>
+      </div>
     </footer>
   </div>
 
@@ -70,4 +114,3 @@
   <script src="/js/app.js"></script>
 </body>
 </html>
-

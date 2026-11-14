@@ -87,6 +87,20 @@ public class ViewController {
         return "signup";
     }
 
+    @GetMapping("/privacy")
+    public String privacy(Model model) {
+        User user = getAuthenticatedUser();
+        addCommonAttributes(model, user);
+        return "privacy";
+    }
+
+    @GetMapping("/terms")
+    public String terms(Model model) {
+        User user = getAuthenticatedUser();
+        addCommonAttributes(model, user);
+        return "terms";
+    }
+
     @GetMapping("/chats")
     public String chats(Model model, @RequestParam(value = "room", required = false) Long roomId) {
         User user = getAuthenticatedUser();

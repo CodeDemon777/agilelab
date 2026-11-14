@@ -69,12 +69,23 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
             .headers(headers -> headers
                 .addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
+                .contentSecurityPolicy(csp -> csp
+                    .policyDirectives("default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://api.dicebear.com https://images.unsplash.com; connect-src 'self' ws: wss:; frame-ancestors 'self';")
+                )
+                .referrerPolicy(referrer -> referrer
+                    .policy(org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
+                )
+                .permissionsPolicy(permissions -> permissions
+                    .policy("camera=(self), microphone=(self), display-capture=(self)")
+                )
             )
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/",
                     "/login",
                     "/signup",
+                    "/privacy",
+                    "/terms",
                     "/health",
                     "/api/health",
                     "/api/auth/**",
@@ -83,7 +94,12 @@ public class SecurityConfig {
                     "/images/**",
                     "/h2-console/**",
                     "/favicon.ico",
+                    "/favicon.svg",
+                    "/robots.txt",
+                    "/sitemap.xml",
+                    "/llms.txt",
                     "/error",
+                    "/error/**",
                     "/ws/**"
                 ).permitAll()
                 .anyRequest().authenticated()

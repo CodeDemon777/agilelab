@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - AgileLab</title>
+  <meta name="description" content="AgileLab data privacy policy, detailing data protection principles, WebRTC peer privacy, and communication confidentiality.">
+  <link rel="canonical" href="https://agilelab.onrender.com/privacy">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="css/app.css">
+  <style>
+    .legal-content-container {
+      max-width: 840px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+    }
+    .legal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 3rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .legal-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-top: 0;
+      letter-spacing: -0.025em;
+    }
+    .legal-updated {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .legal-section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+    .legal-text {
+      color: var(--text-body);
+      font-size: 0.95rem;
+      line-height: 1.68;
+      margin-bottom: 1rem;
+    }
+    .legal-list {
+      color: var(--text-body);
+      font-size: 0.95rem;
+      line-height: 1.68;
+      padding-left: 1.4rem;
+      margin-bottom: 1.5rem;
+    }
+    .legal-list li {
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="app-navbar">
+    <a href="index.html" class="brand-container">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          <path d="M8 10h.01"></path>
+          <path d="M12 10h.01"></path>
+          <path d="M16 10h.01"></path>
+        </svg>
+      </div>
+      <span class="brand-name">AgileLab</span>
+      <span class="brand-badge">PRO</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="chats.html" class="nav-link"><span>Chats</span></a></li>
+      <li><a href="ai-workspace.html" class="nav-link ai-nav-pill"><span>AI Intelligence</span></a></li>
+      <li><a href="notifications.html" class="nav-link"><span>Notifications</span></a></li>
+    </ul>
+    <div>
+      <a href="login.html" class="btn btn-primary" style="padding: 0.45rem 1rem; font-size: 0.88rem;">Sign In</a>
+    </div>
+  </nav>
+
+  <main class="legal-content-container">
+    <div class="legal-card">
+      <h1 class="legal-title">Privacy Policy</h1>
+      <div class="legal-updated">Last Updated: November 14, 2026 &bull; Effective Immediately</div>
+
+      <p class="legal-text">
+        At AgileLab, we take the confidentiality, privacy, and integrity of your team conversations, media streams, and sprint collaboration data with the highest level of engineering rigor. This Privacy Policy details our data minimization practices, encryption standards, and your rights.
+      </p>
+
+      <h2 class="legal-section-title">1. Data Minimization &amp; Information We Collect</h2>
+      <p class="legal-text">We strictly collect only information necessary to operate real-time messaging, audio/video conferencing, and sprint assistance:</p>
+      <ul class="legal-list">
+        <li><strong>Account Information:</strong> Username, email address, password hash (salted using BCrypt), full display name, and avatar seed.</li>
+        <li><strong>Collaboration Data:</strong> Chat messages, group associations, task action items, and meeting transcription text submitted by users.</li>
+        <li><strong>Presence &amp; Session Telemetry:</strong> Active connection state, last-seen timestamps, and ephemeral WebRTC SDP handshake signaling tokens.</li>
+      </ul>
+
+      <h2 class="legal-section-title">2. WebRTC Peer-to-Peer Media Privacy</h2>
+      <p class="legal-text">
+        Direct 1-on-1 voice and video sessions leverage WebRTC peer-to-peer protocols. Media streams (audio and video) flow directly between authorized participant endpoints using DTLS/SRTP encryption. Our servers only facilitate the initial STOMP connection exchange (ICE candidates and session descriptions) and do not store raw audio or video stream bytes.
+      </p>
+
+      <h2 class="legal-section-title">3. Spring AI &amp; LLM Data Boundaries</h2>
+      <p class="legal-text">
+        AI features—including chat summarization, semantic question answering (RAG), and action item extraction—execute within your isolated workspace context. Your conversations are never used to train third-party public machine learning models.
+      </p>
+
+      <h2 class="legal-section-title">4. Security &amp; Data Retention</h2>
+      <p class="legal-text">
+        All transmission is protected via TLS/HTTPS and WSS protocols. Passwords are never stored in plaintext. We implement strict Content Security Policies, connection throttling, and session timeouts. You maintain the right to delete messages, purge action items, or request full account termination at any time.
+      </p>
+
+      <h2 class="legal-section-title">5. Contact Information</h2>
+      <p class="legal-text">
+        For privacy queries, data requests, or compliance audits, contact our Data Protection Team at <a href="mailto:privacy@agilelab.io" style="color:var(--primary); font-weight:600;">privacy@agilelab.io</a> or call <a href="tel:+18005550199" style="color:var(--primary); font-weight:600;">+1 (800) 555-0199</a>.
+      </p>
+    </div>
+  </main>
+</body>
+</html>
+

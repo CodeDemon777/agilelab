@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Workspace - AgileLab</title>
+  <title>AI Sprint Intelligence Workspace - AgileLab</title>
+  <meta name="description" content="Collaborative AI workspace powered by Spring AI, RAG chat assistant, automated sprint action items extraction, meeting transcription, and translation.">
+  <link rel="canonical" href="https://agilelab.io/ai-workspace.html">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/css/app.css">
   <style>
     .ai-container {
@@ -361,24 +364,58 @@
 </head>
 <body>
   <!-- Navigation Header -->
-  <nav class="app-navbar">
-    <a href="/index.html" class="brand-container">
-      <div class="brand-logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          <path d="M8 10h.01"></path>
-          <path d="M12 10h.01"></path>
-          <path d="M16 10h.01"></path>
+  <nav class="app-navbar" role="navigation" aria-label="Main Navigation">
+    <div style="display:flex; align-items:center; gap: 0.85rem;">
+      <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="toggleMobileNav()">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
         </svg>
-      </div>
-      <span class="brand-name">AgileLab</span>
-      <span class="brand-badge">PRO</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="/chats.html" class="nav-link"><span>💬 Chats</span></a></li>
-      <li><a href="/ai-workspace.html" class="nav-link ai-nav-pill active"><span>⚡ AI Intelligence</span></a></li>
-      <li><a href="/notifications.html" class="nav-link"><span>🔔 Notifications</span><span id="navbar-notif-badge" class="nav-badge" style="display:none;">0</span></a></li>
+      </button>
+      <a href="/index.html" class="brand-container" title="AgileLab Home">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            <path d="M8 10h.01"></path>
+            <path d="M12 10h.01"></path>
+            <path d="M16 10h.01"></path>
+          </svg>
+        </div>
+        <span class="brand-name">AgileLab</span>
+        <span class="brand-badge">PRO</span>
+      </a>
+    </div>
+
+    <ul class="nav-links" id="main-nav-links">
+      <li>
+        <a href="/chats.html" class="nav-link">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span>Chats</span>
+        </a>
+      </li>
+      <li>
+        <a href="/ai-workspace.html" class="nav-link ai-nav-pill active" aria-current="page">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+          </svg>
+          <span>AI Intelligence</span>
+        </a>
+      </li>
+      <li>
+        <a href="/notifications.html" class="nav-link">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span>Notifications</span>
+          <span id="navbar-notif-badge" class="nav-badge" style="display:none;">0</span>
+        </a>
+      </li>
     </ul>
+
     <div style="display:flex; align-items:center; gap: 0.75rem;">
       <div id="navbar-user-profile" style="display:none; align-items:center; gap: 0.6rem;">
         <a href="/profile.html" class="user-nav-profile">
@@ -396,7 +433,12 @@
       <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
         <div>
           <h1 class="ai-header-title">
-            <span>⚡ Sprint &amp; Collaboration Intelligence</span>
+            <span style="display:inline-flex; align-items:center; gap:0.5rem;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+              </svg>
+              AgileLab Smart AI Workspace
+            </span>
             <span class="ai-sparkle-badge">Spring AI + RAG</span>
           </h1>
           <p style="color: #94a3b8; max-width: 720px; margin: 0; font-size: 0.95rem; line-height: 1.55;">
@@ -431,20 +473,44 @@
 
     <!-- Workspace Tabs -->
     <div class="ai-tabs-nav">
-      <button class="ai-tab-btn active" data-tab="tab-assistant" onclick="switchAiTab('tab-assistant')">
-        <span>🤖</span> RAG Assistant
+      <button class="ai-tab-btn active" data-tab="tab-assistant" onclick="switchAiTab('tab-assistant')" style="display:inline-flex; align-items:center; gap:0.4rem;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+        RAG Assistant
       </button>
-      <button class="ai-tab-btn" data-tab="tab-action-items" onclick="switchAiTab('tab-action-items')">
-        <span>📋</span> Action Items Kanban (<span id="action-items-count">0</span>)
+      <button class="ai-tab-btn" data-tab="tab-action-items" onclick="switchAiTab('tab-action-items')" style="display:inline-flex; align-items:center; gap:0.4rem;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="9 11 12 14 22 4"></polyline>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+        </svg>
+        Action Items Kanban (<span id="action-items-count">0</span>)
       </button>
-      <button class="ai-tab-btn" data-tab="tab-meetings" onclick="switchAiTab('tab-meetings')">
-        <span>🎙️</span> Meeting Minutes &amp; Transcripts
+      <button class="ai-tab-btn" data-tab="tab-meetings" onclick="switchAiTab('tab-meetings')" style="display:inline-flex; align-items:center; gap:0.4rem;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+          <line x1="12" y1="19" x2="12" y2="22"></line>
+        </svg>
+        Meeting Minutes &amp; Transcripts
       </button>
-      <button class="ai-tab-btn" data-tab="tab-translator" onclick="switchAiTab('tab-translator')">
-        <span>🌐</span> Multilingual AI Translation
+      <button class="ai-tab-btn" data-tab="tab-translator" onclick="switchAiTab('tab-translator')" style="display:inline-flex; align-items:center; gap:0.4rem;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+        Multilingual AI Translation
       </button>
-      <button class="ai-tab-btn" data-tab="tab-insights" onclick="switchAiTab('tab-insights')">
-        <span>📊</span> Velocity &amp; Analytics
+      <button class="ai-tab-btn" data-tab="tab-insights" onclick="switchAiTab('tab-insights')" style="display:inline-flex; align-items:center; gap:0.4rem;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="20" x2="18" y2="10"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+        Velocity &amp; Analytics
       </button>
     </div>
 
@@ -453,7 +519,11 @@
       <div class="rag-chat-wrapper">
         <div class="rag-chat-header">
           <div style="display:flex; align-items:center; gap:10px;">
-            <div style="width:34px; height:34px; border-radius:8px; background:var(--primary); display:flex; align-items:center; justify-content:center; color:white; font-size:1.05rem;">⚡</div>
+            <div style="width:34px; height:34px; border-radius:8px; background:var(--primary); display:flex; align-items:center; justify-content:center; color:white; font-size:1.05rem;" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </div>
             <div>
               <h3 style="margin:0; font-size:1rem; font-weight:700; color:var(--text-main);">AgileLab Assistant (RAG Pipeline)</h3>
               <span style="font-size:0.75rem; color:var(--online-green); font-weight:600;">● Grounded in Real-Time Workspace History</span>
@@ -470,7 +540,7 @@
         <div id="rag-chat-stream" class="rag-chat-stream">
           <div class="rag-msg assistant">
             <div class="rag-bubble">
-              👋 <strong>Hi, I am your AgileLab Collaboration Assistant!</strong><br>
+              <strong>AgileLab AI Assistant:</strong><br>
               I use <strong>Retrieval-Augmented Generation (RAG)</strong> to answer questions grounded directly in your team's messages, sprint decisions, and meeting notes.
               <br><br>
               Try asking:
@@ -484,10 +554,10 @@
         </div>
 
         <div class="rag-prompt-chips">
-          <span class="prompt-chip" onclick="askQuickPrompt('What decisions were made about the sprint?')">💡 What decisions were made?</span>
-          <span class="prompt-chip" onclick="askQuickPrompt('Who is working on the Docker container task?')">🐳 Who is assigned to Docker?</span>
-          <span class="prompt-chip" onclick="askQuickPrompt('What time is our next team meeting?')">🕒 When is the meeting?</span>
-          <span class="prompt-chip" onclick="askQuickPrompt('Summarize recent discussions from Alice')">👩 Alice's updates</span>
+          <span class="prompt-chip" onclick="askQuickPrompt('What decisions were made about the sprint?')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>What decisions were made?</span>
+          <span class="prompt-chip" onclick="askQuickPrompt('Who is working on the Docker container task?')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>Who is assigned to Docker?</span>
+          <span class="prompt-chip" onclick="askQuickPrompt('What time is our next team meeting?')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>When is the meeting?</span>
+          <span class="prompt-chip" onclick="askQuickPrompt('Summarize recent discussions from Alice')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle; margin-right:4px;" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Alice's updates</span>
         </div>
 
         <div class="rag-input-box">
@@ -511,7 +581,12 @@
           <select id="action-room-filter" class="input-field" style="margin:0; width:auto; font-size:0.85rem;">
             <option value="">All Rooms</option>
           </select>
-          <button class="btn btn-secondary" style="font-size:0.85rem;" onclick="AiWorkspace.triggerAutoExtractFromFilter()">✨ Auto-Extract from Room</button>
+          <button class="btn btn-secondary" style="font-size:0.85rem; display:inline-flex; align-items:center; gap:0.4rem;" onclick="AiWorkspace.triggerAutoExtractFromFilter()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+            </svg>
+            Auto-Extract from Room
+          </button>
           <button class="btn btn-primary" style="font-size:0.85rem;" onclick="openNewActionItemModal()">+ New Task</button>
         </div>
       </div>
@@ -531,7 +606,14 @@
     <!-- TAB 4: Translation -->
     <div id="tab-translator" class="ai-tab-pane">
       <div class="content-box">
-        <h3 style="margin:0 0 0.4rem; font-size:1.15rem; font-weight:700; color:var(--text-main);">🌍 Multilingual AI Translation</h3>
+        <h3 style="margin:0 0 0.4rem; font-size:1.15rem; font-weight:700; color:var(--text-main); display:inline-flex; align-items:center; gap:0.5rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          Multilingual AI Translation
+        </h3>
         <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1.5rem;">Translate team messages, client requests, and technical specifications into 10+ languages instantly.</p>
 
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.25rem;">
@@ -563,7 +645,14 @@
     <!-- TAB 5: Insights -->
     <div id="tab-insights" class="ai-tab-pane">
       <div class="content-box">
-        <h3 style="margin:0 0 1rem; font-size:1.15rem; font-weight:700; color:var(--text-main);">📊 AI Collaboration Analytics</h3>
+        <h3 style="margin:0 0 1rem; font-size:1.15rem; font-weight:700; color:var(--text-main); display:inline-flex; align-items:center; gap:0.5rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          AI Collaboration Analytics
+        </h3>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.25rem;">
           <div style="background:var(--bg-subtle); border-radius:var(--radius-md); padding:1.25rem; border:1px solid var(--border-color);">
             <h4 style="margin:0 0 0.75rem; font-size:0.95rem; font-weight:700; color:var(--text-main);">Task Status Breakdown</h4>

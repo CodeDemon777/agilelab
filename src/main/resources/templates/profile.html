@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title th:text="${profileUser.fullName + ' - Profile | AgileLab'}">User Profile</title>
+  <title th:text="${profileUser.fullName + ' - Profile | AgileLab'}">User Profile - AgileLab</title>
+  <meta name="description" content="View and manage user profile details, status quote, avatar, and security credentials in AgileLab.">
+  <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
   <link rel="stylesheet" th:href="@{/css/ProfilePage.css}">
   <link rel="stylesheet" th:href="@{/css/app.css}">
   <style>
@@ -61,17 +63,24 @@
 
       <!-- If viewing someone else's profile -->
       <div th:if="${!isSelf}" style="display: flex; gap: 0.75rem; justify-content: center;">
-        <button class="btn-edit-profile" style="background-color: var(--primary);"
+        <button class="btn-edit-profile" style="background-color: var(--primary); display:inline-flex; align-items:center; gap:0.4rem;"
                 id="btn-profile-send-msg"
                 th:data-target-username="${profileUser.username}"
                 onclick="startDirectChat(this.getAttribute('data-target-username'))">
-          💬 Send Message
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          Send Message
         </button>
-        <button class="btn-edit-profile"
+        <button class="btn-edit-profile" style="display:inline-flex; align-items:center; gap:0.4rem;"
                 id="btn-profile-call"
                 th:data-target-username="${profileUser.username}"
                 onclick="startProfileCall(this.getAttribute('data-target-username'))">
-          📹 Video Call
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="23 7 16 12 23 17 23 7"></polygon>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+          </svg>
+          Video Call
         </button>
       </div>
     </div>

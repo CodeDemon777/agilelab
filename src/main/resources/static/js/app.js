@@ -214,8 +214,25 @@ const App = {
                 }
             });
         });
+
+        // Dynamic Copyright Year
+        document.querySelectorAll('#copyright-year').forEach(el => {
+            el.textContent = new Date().getFullYear();
+        });
     }
 };
+
+function toggleMobileNav() {
+    const navLinks = document.getElementById('main-nav-links');
+    const toggleBtn = document.getElementById('mobile-nav-toggle');
+    if (navLinks) {
+        navLinks.classList.toggle('mobile-open');
+        const isOpen = navLinks.classList.contains('mobile-open');
+        if (toggleBtn) {
+            toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+    }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     App.init();

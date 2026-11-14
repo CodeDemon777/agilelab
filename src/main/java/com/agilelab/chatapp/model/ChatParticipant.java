@@ -4,9 +4,15 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "chat_participants", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"chat_room_id", "user_id"})
-})
+@Table(name = "chat_participants",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uk_participant_room_user", columnNames = {"chat_room_id", "user_id"})
+    },
+    indexes = {
+        @Index(name = "idx_participant_user", columnList = "user_id"),
+        @Index(name = "idx_participant_room", columnList = "chat_room_id")
+    }
+)
 public class ChatParticipant {
 
     @Id

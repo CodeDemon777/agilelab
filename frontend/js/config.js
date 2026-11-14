@@ -123,8 +123,14 @@ const AppConfig = {
             modal.innerHTML = `
                 <div style="background: white; border-radius: 14px; max-width: 460px; width: 100%; padding: 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3); font-family: -apple-system, sans-serif;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">
-                        <h3 style="margin:0; font-size:1.15rem; color:#0f172a;">🔗 Configure Render Backend URL</h3>
-                        <button onclick="document.getElementById('config-backend-modal').style.display='none'" style="background:none; border:none; font-size:1.4rem; cursor:pointer;">&times;</button>
+                        <h3 style="margin:0; font-size:1.15rem; color:#0f172a; display:flex; align-items:center; gap:0.4rem;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                            </svg>
+                            Configure Render Backend URL
+                        </h3>
+                        <button onclick="document.getElementById('config-backend-modal').style.display='none'" style="background:none; border:none; font-size:1.4rem; cursor:pointer;" aria-label="Close Modal">&times;</button>
                     </div>
                     <p style="font-size:0.86rem; color:#64748b; line-height:1.45; margin:0 0 1rem;">
                         Enter the public URL of your Spring Boot backend hosted on Render (or local dev server):
@@ -136,7 +142,7 @@ const AppConfig = {
 
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <button onclick="AppConfig.testBackendConnection()" style="background:#f1f5f9; border:1px solid #cbd5e1; padding:6px 14px; border-radius:6px; cursor:pointer; font-size:0.85rem; font-weight:600;">
-                            Test Ping ⚡
+                            Test Connection
                         </button>
                         <div style="display:flex; gap:0.5rem;">
                             <button onclick="document.getElementById('config-backend-modal').style.display='none'" style="background:none; border:none; color:#64748b; cursor:pointer; font-weight:600;">Cancel</button>
@@ -161,7 +167,7 @@ const AppConfig = {
         const resBox = document.getElementById('cfg-ping-result');
         resBox.style.display = 'block';
         resBox.style.color = '#64748b';
-        resBox.innerText = 'Pinging backend... ⏳';
+        resBox.innerText = 'Pinging backend...';
 
         try {
             let res;
@@ -172,14 +178,14 @@ const AppConfig = {
             }
             if (res.ok || res.status === 401) {
                 resBox.style.color = '#10b981';
-                resBox.innerHTML = '✅ Backend is online & reachable!';
+                resBox.innerHTML = 'Backend is online and reachable.';
             } else {
                 resBox.style.color = '#f59e0b';
-                resBox.innerText = `⚠️ Backend replied with HTTP ${res.status}`;
+                resBox.innerText = `Backend replied with HTTP ${res.status}`;
             }
         } catch (e) {
             resBox.style.color = '#ef4444';
-            resBox.innerText = '❌ Failed to reach backend. Check URL and CORS.';
+            resBox.innerText = 'Failed to reach backend. Check URL and CORS configuration.';
         }
     }
 };

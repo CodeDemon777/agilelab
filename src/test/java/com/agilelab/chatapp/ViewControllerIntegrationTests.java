@@ -146,3 +146,4 @@ class ViewControllerIntegrationTests {
                 .andExpect(model().attributeExists("rooms"));
     }
 }
+

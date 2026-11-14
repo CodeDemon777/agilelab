@@ -1,61 +1,80 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
 <head></head>
-
 <body>
-    <nav th:fragment="navbar(activeTab)" class="app-navbar">
-        <a href="/chats" class="brand-container">
-            <div class="brand-logo">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    <path d="M8 10h.01"></path>
-                    <path d="M12 10h.01"></path>
-                    <path d="M16 10h.01"></path>
+    <nav th:fragment="navbar(activeTab)" class="app-navbar" role="navigation" aria-label="Main Navigation">
+        <div style="display:flex; align-items:center; gap: 0.85rem;">
+            <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="toggleMobileNav()">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
                 </svg>
-            </div>
-            <span class="brand-name">AgileLab</span>
-            <span class="brand-badge">PRO</span>
-        </a>
+            </button>
+            <a th:href="@{/}" class="brand-container" title="AgileLab Home">
+                <div class="brand-logo" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        <path d="M8 10h.01"></path>
+                        <path d="M12 10h.01"></path>
+                        <path d="M16 10h.01"></path>
+                    </svg>
+                </div>
+                <span class="brand-name">AgileLab</span>
+                <span class="brand-badge">PRO</span>
+            </a>
+        </div>
 
-        <ul class="nav-links">
+        <ul class="nav-links" id="main-nav-links">
             <li>
-                <a href="/chats" class="nav-link" th:classappend="${activeTab == 'chats'} ? 'active' : ''">
-                    <span>💬 Chats</span>
+                <a th:href="@{/chats}" class="nav-link" th:classappend="${activeTab == 'chats'} ? 'active' : ''" th:attr="aria-current=${activeTab == 'chats'} ? 'page' : null">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span>Chats</span>
                 </a>
             </li>
             <li>
-                <a href="/ai-workspace" class="nav-link ai-nav-pill"
-                    th:classappend="${activeTab == 'ai-workspace'} ? 'active' : ''">
-                    <span>⚡ AI Intelligence</span>
+                <a th:href="@{/ai-workspace}" class="nav-link ai-nav-pill" th:classappend="${activeTab == 'ai-workspace'} ? 'active' : ''" th:attr="aria-current=${activeTab == 'ai-workspace'} ? 'page' : null">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                    </svg>
+                    <span>AI Intelligence</span>
                 </a>
             </li>
             <li>
-                <a href="/notifications" class="nav-link"
-                    th:classappend="${activeTab == 'notifications'} ? 'active' : ''">
-                    <span>🔔 Notifications</span>
+                <a th:href="@{/notifications}" class="nav-link" th:classappend="${activeTab == 'notifications'} ? 'active' : ''" th:attr="aria-current=${activeTab == 'notifications'} ? 'page' : null">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span>Notifications</span>
                     <span id="navbar-notif-badge" class="nav-badge"
-                        th:style="${unreadCount != null and unreadCount > 0} ? 'display:inline-block;' : 'display:none;'"
-                        th:text="${unreadCount != null ? unreadCount : 0}">0</span>
+                          th:style="${unreadCount != null and unreadCount > 0} ? 'display:inline-block;' : 'display:none;'"
+                          th:text="${unreadCount != null ? unreadCount : 0}">0</span>
                 </a>
             </li>
         </ul>
 
-        <div style="display:flex; align-items:center; gap: 0.75rem;" th:if="${currentUser != null}">
-            <a href="/profile" class="user-nav-profile" title="View Profile">
-                <div class="nav-avatar-wrap">
-                    <img th:src="${currentUser.avatarUrl}" class="nav-avatar" alt="Avatar">
-                    <span class="presence-dot online" th:data-user-presence="${currentUser.username}"></span>
-                </div>
-                <span style="font-weight:600; font-size:0.88rem;" th:text="${currentUser.fullName}">User</span>
-            </a>
+        <div style="display:flex; align-items:center; gap: 0.75rem;">
+            <th:block th:if="${currentUser == null}">
+                <a th:href="@{/login}" class="btn btn-secondary" style="padding: 0.45rem 1rem; font-size: 0.88rem;">Log In</a>
+                <a th:href="@{/signup}" class="btn btn-primary" style="padding: 0.45rem 1rem; font-size: 0.88rem;">Get Started</a>
+            </th:block>
+            <th:block th:if="${currentUser != null}">
+                <a th:href="@{/profile}" class="user-nav-profile" title="View Profile">
+                    <div class="nav-avatar-wrap">
+                        <img th:src="${currentUser.avatarUrl}" class="nav-avatar" alt="Avatar">
+                        <span class="presence-dot online" th:data-user-presence="${currentUser.username}"></span>
+                    </div>
+                    <span style="font-weight:600; font-size:0.88rem;" th:text="${currentUser.fullName}">User</span>
+                </a>
 
-            <form th:action="@{/logout}" method="post" style="margin:0;">
-                <button type="submit" class="nav-logout-btn">Log Out</button>
-            </form>
+                <form th:action="@{/logout}" method="post" style="margin:0;">
+                    <button type="submit" class="nav-logout-btn" aria-label="Log Out">Log Out</button>
+                </form>
+            </th:block>
         </div>
     </nav>
 </body>
-
 </html>

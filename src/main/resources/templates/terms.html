@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service - AgileLab</title>
+  <meta name="description" content="AgileLab terms of service, platform usage terms, acceptable use policies, and service level agreements.">
+  <link rel="canonical" href="https://agilelab.onrender.com/terms">
+  <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <style>
+    .legal-content-container {
+      max-width: 840px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+    }
+    .legal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 3rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .legal-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-top: 0;
+      letter-spacing: -0.025em;
+    }
+    .legal-updated {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .legal-section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+    .legal-text {
+      color: var(--text-body);
+      font-size: 0.95rem;
+      line-height: 1.68;
+      margin-bottom: 1rem;
+    }
+    .legal-list {
+      color: var(--text-body);
+      font-size: 0.95rem;
+      line-height: 1.68;
+      padding-left: 1.4rem;
+      margin-bottom: 1.5rem;
+    }
+    .legal-list li {
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div th:replace="~{fragments/navbar :: navbar('terms')}"></div>
+
+  <main class="legal-content-container">
+    <div class="legal-card">
+      <h1 class="legal-title">Terms of Service</h1>
+      <div class="legal-updated">Last Updated: November 14, 2026 &bull; Effective Immediately</div>
+
+      <p class="legal-text">
+        These Terms of Service ("Terms") govern your access to and use of AgileLab ("Service"), including our real-time messaging application, WebRTC audio/video calling infrastructure, and Spring AI workspace assistants.
+      </p>
+
+      <h2 class="legal-section-title">1. Account Security &amp; Responsibilities</h2>
+      <p class="legal-text">
+        You are responsible for maintaining the confidentiality of your account credentials. You agree to notify us immediately of any unauthorized access. Account sharing or transmitting automated brute-force scripts against our authentication APIs is strictly prohibited and subject to automated IP rate limiting.
+      </p>
+
+      <h2 class="legal-section-title">2. Acceptable Use Policy</h2>
+      <p class="legal-text">When utilizing AgileLab, you agree not to:</p>
+      <ul class="legal-list">
+        <li>Interfere with, disrupt, or bypass rate limits, WebSocket brokers, or security headers.</li>
+        <li>Transmit malicious payloads, worms, or trojans via file attachments or message payloads.</li>
+        <li>Attempt unauthorized access to rooms, private direct chats, or team messages outside your granted permissions.</li>
+        <li>Impersonate other engineers or use the service for unsolicited spam.</li>
+      </ul>
+
+      <h2 class="legal-section-title">3. Service Availability &amp; WebSockets</h2>
+      <p class="legal-text">
+        While we strive for 99.9% uptime, real-time WebSockets and WebRTC connections depend on local network topologies and NAT configurations. We provide fallback health check endpoints at <code>/api/health</code> for real-time uptime monitoring.
+      </p>
+
+      <h2 class="legal-section-title">4. Limitation of Liability</h2>
+      <p class="legal-text">
+        AgileLab is provided "as is" and "as available". In no event shall AgileLab or its contributors be liable for any direct, indirect, incidental, or consequential damages resulting from downtime or communication latency.
+      </p>
+
+      <h2 class="legal-section-title">5. Support &amp; Inquiries</h2>
+      <p class="legal-text">
+        For support, legal questions, or terms inquiries, contact our engineering operations team at <a href="mailto:support@agilelab.io" style="color:var(--primary); font-weight:600;">support@agilelab.io</a> or call <a href="tel:+18005550199" style="color:var(--primary); font-weight:600;">+1 (800) 555-0199</a>.
+      </p>
+    </div>
+  </main>
+</body>
+</html>
+

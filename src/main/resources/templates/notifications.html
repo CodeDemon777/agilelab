@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notifications - AgileLab</title>
+  <title>Notifications - AgileLab Team Collaboration</title>
+  <meta name="description" content="Stay updated with incoming direct messages, group chat invitations, and WebRTC calls in AgileLab.">
+  <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
   <link rel="stylesheet" th:href="@{/css/NotificationsPage.css}">
   <link rel="stylesheet" th:href="@{/css/app.css}">
   <style>
@@ -55,10 +57,15 @@
       </li>
 
       <li th:if="${notifications == null or #lists.isEmpty(notifications)}"
-          style="text-align: center; padding: 3rem 1rem; color: #94a3b8; background: white; border-radius: 10px;">
-        <span style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;">🎉</span>
-        <h3 style="margin: 0 0 6px 0;">All caught up!</h3>
-        <p style="margin: 0; font-size: 0.9rem;">You have no new notifications.</p>
+          style="text-align: center; padding: 3rem 1rem; color: var(--text-muted); background: white; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+        <div class="empty-state-icon" style="margin: 0 auto 1rem auto;" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+        </div>
+        <h3 style="margin: 0 0 6px 0; color:var(--text-main); font-size:1.1rem; font-weight:700;">All caught up</h3>
+        <p style="margin: 0; font-size: 0.9rem; color:var(--text-muted);">You have no pending notifications at this time.</p>
       </li>
     </ul>
   </div>

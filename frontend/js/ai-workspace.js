@@ -140,18 +140,23 @@ const AiWorkspace = {
 
                 <div>
                     <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; color:#64748b; margin-top:0.5rem;">
-                        <span>${item.roomName ? '📌 ' + escapeHtml(item.roomName) : ''}</span>
-                        <span>${item.formattedDueDate ? '⏰ Due: ' + escapeHtml(item.formattedDueDate) : ''}</span>
+                        <span>${item.roomName ? escapeHtml(item.roomName) : ''}</span>
+                        <span>${item.formattedDueDate ? 'Due: ' + escapeHtml(item.formattedDueDate) : ''}</span>
                     </div>
 
                     <div class="action-card-footer">
                         <div class="assignee-chip">
-                            <img src="${item.assignedToAvatar || '/images/default-avatar.svg'}" class="assignee-avatar">
+                            <img src="${item.assignedToAvatar || '/images/default-avatar.svg'}" class="assignee-avatar" alt="Assignee">
                             <span>${escapeHtml(item.assignedToName || 'Unassigned')}</span>
                         </div>
                         <div style="display:flex; align-items:center; gap:8px;">
                             <span class="priority-badge ${item.priority || 'MEDIUM'}">${escapeHtml(item.priority || 'MEDIUM')}</span>
-                            <button style="background:none; border:none; cursor:pointer; font-size:0.9rem; color:#94a3b8;" title="Delete" onclick="AiWorkspace.deleteActionItem(${item.id})">🗑️</button>
+                            <button style="background:none; border:none; cursor:pointer; color:#94a3b8; display:flex; align-items:center;" title="Delete" onclick="AiWorkspace.deleteActionItem(${item.id})" aria-label="Delete Action Item">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -254,7 +259,7 @@ const AiWorkspace = {
                         <h4 style="margin:0; font-size:1.15rem; font-weight:700; color:#0f172a;">${escapeHtml(m.title)}</h4>
                         <span style="font-size:0.82rem; color:#64748b;">Recorded on ${escapeHtml(m.formattedCreatedAt || 'Recent')}</span>
                     </div>
-                    <span class="meeting-badge">✨ AI Processed</span>
+                    <span class="meeting-badge">AI Processed</span>
                 </div>
 
                 <div style="margin-bottom:1rem;">
@@ -264,13 +269,13 @@ const AiWorkspace = {
 
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1rem; margin-bottom:1rem;">
                     <div style="background:#f8fafc; border-radius:8px; padding:0.85rem 1rem; border:1px solid #e2e8f0;">
-                        <h5 style="margin:0 0 0.4rem; font-size:0.88rem; font-weight:700; color:#0f172a;">🎯 Key Strategic Decisions</h5>
+                        <h5 style="margin:0 0 0.4rem; font-size:0.88rem; font-weight:700; color:#0f172a;">Key Strategic Decisions</h5>
                         <ul style="margin:0; padding-left:1.2rem; font-size:0.86rem; color:#475569;">
                             ${(m.keyDecisions || []).map(d => `<li>${escapeHtml(d)}</li>`).join('')}
                         </ul>
                     </div>
                     <div style="background:#f8fafc; border-radius:8px; padding:0.85rem 1rem; border:1px solid #e2e8f0;">
-                        <h5 style="margin:0 0 0.4rem; font-size:0.88rem; font-weight:700; color:#0f172a;">📋 Follow-Up Action Items</h5>
+                        <h5 style="margin:0 0 0.4rem; font-size:0.88rem; font-weight:700; color:#0f172a;">Follow-Up Action Items</h5>
                         <ul style="margin:0; padding-left:1.2rem; font-size:0.86rem; color:#475569;">
                             ${(m.actionItems || []).map(a => `<li>${escapeHtml(a)}</li>`).join('')}
                         </ul>
@@ -326,7 +331,7 @@ async function submitRagQuery() {
 
     const loadingMsg = document.createElement('div');
     loadingMsg.className = 'rag-msg assistant';
-    loadingMsg.innerHTML = `<div class="rag-bubble"><em>Thinking &amp; searching chat knowledge base... ⏳</em></div>`;
+    loadingMsg.innerHTML = `<div class="rag-bubble"><em>Thinking &amp; searching chat knowledge base...</em></div>`;
     stream.appendChild(loadingMsg);
     stream.scrollTop = stream.scrollHeight;
 
@@ -346,7 +351,7 @@ async function submitRagQuery() {
         if (data.citations && data.citations.length > 0) {
             citationsHtml = `
                 <div class="rag-citations-box">
-                    <strong>🔍 Grounded Sources from Chat:</strong>
+                    <strong>Grounded Sources from Chat:</strong>
                     <ul style="margin: 4px 0 0; padding-left: 1.2rem;">
                         ${data.citations.map(c => `
                             <li><strong>${escapeHtml(c.senderName)}</strong> (${escapeHtml(c.formattedTime)} in <em>${escapeHtml(c.roomName || 'Chat')}</em>): "${escapeHtml(c.messageSnippet)}"</li>
@@ -404,7 +409,7 @@ async function performTranslation() {
     const outputEl = document.getElementById('translate-output');
 
     if (!input) return;
-    outputEl.value = 'Translating... ⏳';
+    outputEl.value = 'Translating message...';
 
     try {
         const res = await AppConfig.fetch('/api/ai/translate', {

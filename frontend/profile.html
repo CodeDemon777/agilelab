@@ -4,31 +4,65 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile Settings - AgileLab</title>
-  <link rel="stylesheet" href="/css/app.css">
-  <link rel="stylesheet" href="/css/ProfilePage.css">
+  <meta name="description" content="View and manage user profile details, status quote, avatar, and security credentials in AgileLab.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/ProfilePage.css">
 </head>
 <body>
   <!-- Navigation Header -->
-  <nav class="app-navbar">
-    <a href="/index.html" class="brand-container">
-      <div class="brand-logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          <path d="M8 10h.01"></path>
-          <path d="M12 10h.01"></path>
-          <path d="M16 10h.01"></path>
+  <nav class="app-navbar" role="navigation" aria-label="Main Navigation">
+    <div style="display:flex; align-items:center; gap: 0.85rem;">
+      <button type="button" class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="toggleMobileNav()">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
         </svg>
-      </div>
-      <span class="brand-name">AgileLab</span>
-      <span class="brand-badge">PRO</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="/chats.html" class="nav-link"><span>💬 Chats</span></a></li>
-      <li><a href="/ai-workspace.html" class="nav-link ai-nav-pill"><span>⚡ AI Intelligence</span></a></li>
-      <li><a href="/notifications.html" class="nav-link"><span>🔔 Notifications</span></a></li>
+      </button>
+      <a href="index.html" class="brand-container" title="AgileLab Home">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            <path d="M8 10h.01"></path>
+            <path d="M12 10h.01"></path>
+            <path d="M16 10h.01"></path>
+          </svg>
+        </div>
+        <span class="brand-name">AgileLab</span>
+        <span class="brand-badge">PRO</span>
+      </a>
+    </div>
+
+    <ul class="nav-links" id="main-nav-links">
+      <li>
+        <a href="chats.html" class="nav-link">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span>Chats</span>
+        </a>
+      </li>
+      <li>
+        <a href="ai-workspace.html" class="nav-link ai-nav-pill">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+          </svg>
+          <span>AI Intelligence</span>
+        </a>
+      </li>
+      <li>
+        <a href="notifications.html" class="nav-link">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span>Notifications</span>
+        </a>
+      </li>
     </ul>
     <div style="display:flex; align-items:center; gap: 0.75rem;">
-      <button onclick="App.logout()" class="nav-logout-btn">Log Out</button>
+      <button onclick="App.logout()" class="nav-logout-btn" aria-label="Log Out">Log Out</button>
     </div>
   </nav>
 
@@ -49,7 +83,7 @@
 
         <div class="form-group">
           <label class="form-label">Status Quote / Headline</label>
-          <input type="text" id="input-status-quote" class="input-field" placeholder="e.g. Architecting real-time distributed systems 🚀">
+          <input type="text" id="input-status-quote" class="input-field" placeholder="e.g. Architecting real-time distributed systems">
         </div>
 
         <div class="form-group" style="margin-bottom: 1.5rem;">
@@ -120,7 +154,7 @@
         });
         if (res.ok) {
           alertBox.className = 'alert success';
-          alertBox.innerText = 'Profile saved successfully! ✨';
+          alertBox.innerText = 'Profile saved successfully!';
           alertBox.style.display = 'block';
           loadUserProfile();
         } else {

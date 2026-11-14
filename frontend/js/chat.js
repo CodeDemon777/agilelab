@@ -187,7 +187,7 @@ const ChatApp = {
         const historyContainer = document.getElementById('chat-history');
         if (!historyContainer) return;
 
-        historyContainer.innerHTML = '<div style="text-align:center; padding:1.5rem; color:#94a3b8;">Loading conversation... ⏳</div>';
+        historyContainer.innerHTML = '<div style="text-align:center; padding:1.5rem; color:#94a3b8;">Loading conversation...</div>';
 
         try {
             const resp = await AppConfig.fetch(`/api/chats/${roomId}/messages`);
@@ -440,7 +440,7 @@ const ChatApp = {
     translateCurrentRoom: async function () {
         const targetLanguage = document.getElementById('chat-translate-lang').value;
         const results = document.getElementById('chat-translate-results');
-        results.innerHTML = '<p style="color:#64748b; text-align:center;">Translating recent room messages... ⏳</p>';
+        results.innerHTML = '<p style="color:#64748b; text-align:center;">Translating recent room messages...</p>';
 
         if (!this.currentRoomId) return;
 

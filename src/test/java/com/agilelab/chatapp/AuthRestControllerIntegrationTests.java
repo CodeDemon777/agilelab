@@ -223,3 +223,4 @@ class AuthRestControllerIntegrationTests {
                 .andExpect(model().attributeExists("errorMessage"));
     }
 }
+

@@ -184,7 +184,7 @@ const ChatApp = {
                 const messages = await resp.json();
                 historyContainer.innerHTML = '';
                 if (messages.length === 0) {
-                    historyContainer.innerHTML = '<div style="text-align:center; padding: 3rem; color:#999;">No messages yet. Say hello! 👋</div>';
+                    historyContainer.innerHTML = '<div style="text-align:center; padding: 3rem; color:#999;">No messages yet. Start the conversation!</div>';
                 } else {
                     messages.forEach(m => this.appendMessage(m, false));
                     this.scrollToBottom();
@@ -489,7 +489,7 @@ const ChatApp = {
     translateCurrentRoom: async function () {
         const targetLanguage = document.getElementById('chat-translate-lang').value;
         const results = document.getElementById('chat-translate-results');
-        results.innerHTML = '<p style="color:#64748b; text-align:center;">Translating recent room messages... ⏳</p>';
+        results.innerHTML = '<p style="color:#64748b; text-align:center;">Translating recent room messages...</p>';
 
         if (!this.currentRoomId) return;
 

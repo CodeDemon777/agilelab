@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /signup
+Allow: /privacy
+Allow: /terms
+Disallow: /api/
+Disallow: /chats
+Disallow: /call/
+Disallow: /ai-workspace
+Disallow: /notifications
+Disallow: /profile
+Disallow: /h2-console
+
+Sitemap: https://agilelab.onrender.com/sitemap.xml
+

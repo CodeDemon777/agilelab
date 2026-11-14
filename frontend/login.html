@@ -3,16 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Log In - AgileLab</title>
-  <link rel="stylesheet" href="/css/app.css">
-  <link rel="stylesheet" href="/css/LogIn.css">
+  <title>Sign In - AgileLab Team Collaboration</title>
+  <meta name="description" content="Sign in to your AgileLab workspace to collaborate with your team, initiate WebRTC video calls, and access AI sprint summaries.">
+  <link rel="canonical" href="https://agilelab.onrender.com/login">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/LogIn.css">
 </head>
 <body>
   <div class="login-page-container">
     <div class="login-card">
       <div style="text-align: center; margin-bottom: 1.5rem;">
-        <a href="/index.html" class="brand-container" style="justify-content: center; margin-bottom: 0.75rem;">
-          <div class="brand-logo">
+        <a href="index.html" class="brand-container" style="justify-content: center; margin-bottom: 0.75rem;" title="AgileLab Home">
+          <div class="brand-logo" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
               <path d="M8 10h.01"></path>
@@ -22,7 +25,7 @@
           </div>
           <span class="brand-name">AgileLab</span>
         </a>
-        <h2 class="login-title">Welcome Back</h2>
+        <h1 class="login-title">Welcome Back</h1>
         <p class="login-subtitle">Sign in to access your team chat and sprint intelligence.</p>
       </div>
 
@@ -31,7 +34,12 @@
 
       <!-- 1-Click Demo Credentials -->
       <div class="demo-box">
-        <p class="demo-title">⚡ 1-Click Instant Demo Login:</p>
+        <p class="demo-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--primary); display:inline-block; vertical-align:middle; margin-right:4px;">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          Instant Demo One-Click Access:
+        </p>
         <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
           <button type="button" class="demo-user-pill" onclick="quickFill('johndoe')">John Doe</button>
           <button type="button" class="demo-user-pill" onclick="quickFill('alice')">Alice</button>

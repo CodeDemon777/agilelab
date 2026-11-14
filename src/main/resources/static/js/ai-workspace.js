@@ -37,7 +37,7 @@ async function submitRagQuery() {
     const loadingMsg = document.createElement('div');
     loadingMsg.className = 'rag-msg assistant';
     loadingMsg.id = 'rag-loading-bubble';
-    loadingMsg.innerHTML = `<div class="rag-bubble"><em>Thinking &amp; searching chat knowledge base... ⏳</em></div>`;
+    loadingMsg.innerHTML = `<div class="rag-bubble"><em>Thinking &amp; searching chat knowledge base...</em></div>`;
     stream.appendChild(loadingMsg);
     stream.scrollTop = stream.scrollHeight;
 
@@ -58,7 +58,7 @@ async function submitRagQuery() {
         if (data.citations && data.citations.length > 0) {
             citationsHtml = `
                 <div class="rag-citations-box">
-                    <strong>🔍 Grounded Sources from Chat:</strong>
+                    <strong>Grounded Sources from Chat:</strong>
                     <ul style="margin: 4px 0 0; padding-left: 1.2rem;">
                         ${data.citations.map(c => `
                             <li><strong>${escapeHtml(c.senderName)}</strong> (${escapeHtml(c.formattedTime)} in <em>${escapeHtml(c.roomName || 'Chat')}</em>): "${escapeHtml(c.messageSnippet)}"</li>
@@ -224,7 +224,7 @@ async function performTranslation() {
     const outputEl = document.getElementById('translate-output');
 
     if (!input) return;
-    outputEl.value = 'Translating... ⏳';
+    outputEl.value = 'Translating message...';
 
     try {
         const res = await fetch('/api/ai/translate', {

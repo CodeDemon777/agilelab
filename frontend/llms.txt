@@ -1,0 +1,37 @@
+# AgileLab - Production Full-Stack Real-Time Chat & Video Platform
+
+> AgileLab is an enterprise-grade real-time collaboration application combining high-throughput dual-panel chat, peer-to-peer WebRTC audio/video calling, and Spring AI-powered sprint intelligence.
+
+## Technical Architecture
+- **Language & Runtime**: Java 21 (LTS), OpenJDK Temurin 21.
+- **Backend Framework**: Spring Boot 3.4.0 with Spring MVC, Spring Data JPA, Spring Security 6, and Spring WebSocket (STOMP broker).
+- **Frontend Architecture**: Dual distribution:
+  1. Thymeleaf server-side templates with responsive vanilla JS and modern CSS design system.
+  2. Standalone static web client optimized for Vercel edge deployment.
+- **Data Persistence**: Relational storage (H2 database with connection pooling via HikariCP, indexes on chat messages, participants, call records, and notifications).
+- **Real-Time Layer**: STOMP over SockJS (`/ws`), multi-topic pub/sub (`/topic/room.{id}`, `/topic/presence`, `/topic/call.{id}`), and private user queues (`/user/queue/call`, `/user/queue/notifications`).
+- **AI Integration**: Spring AI with semantic Retrieval-Augmented Generation (RAG) over chat history, discussion summarization, automated action item extraction to Kanban, and speech-to-text meeting transcription notes.
+
+## Key Endpoints
+- `GET /api/health` - Application health check and telemetry status (JSON).
+- `POST /api/auth/register` - User registration with validation and password encryption.
+- `POST /api/auth/login` - Authenticates user and establishes secure session cookie.
+- `GET /api/auth/current` - Returns authenticated user profile and roles.
+- `GET /api/chats` - Retrieves user's direct and group chat rooms with preview and unread counters.
+- `POST /api/chats/direct` - Initiates or retrieves 1-on-1 direct chat.
+- `POST /api/chats/group` - Creates group chat with team members and dispatches notifications.
+- `GET /api/chats/{id}/messages` - Retrieves authorized room message history.
+- `POST /api/chats/{id}/message` - Sends message to room and broadcasts via STOMP.
+- `POST /api/ai/ask` - RAG assistant semantic query over team discussion history.
+- `POST /api/ai/summarize/{roomId}` - Generates executive summary and decisions from room discussion.
+- `POST /api/ai/action-items/extract/{roomId}` - Extracts tasks, deadlines, and assignees.
+- `POST /api/ai/meeting-notes` - Generates structured meeting notes from WebRTC transcriptions.
+- `POST /api/ai/translate` - Translates text across Spanish, French, German, and Japanese.
+
+## Security Posture
+- BCrypt salted password hashing.
+- Role-based authorization and strict room participant checks.
+- In-memory rate limiting against auth brute-force attempts (`RateLimitingFilter`).
+- Content Security Policy (CSP), Strict-Origin-When-Cross-Origin, and Permissions-Policy headers.
+- Ephemeral WebRTC media streams with DTLS/SRTP end-to-end encryption.
+

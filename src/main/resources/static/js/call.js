@@ -337,11 +337,11 @@ const CallManager = {
 
         if (this.isTranscribing) {
             if (drawer) drawer.style.display = 'block';
-            if (btn) btn.innerText = '⏹️ Stop Transcript';
+            if (btn) btn.innerText = 'Stop Transcript';
             this.startSpeechRecognition();
         } else {
             if (drawer) drawer.style.display = 'none';
-            if (btn) btn.innerText = '🎙️ Live AI Transcript';
+            if (btn) btn.innerText = 'Live AI Transcript';
             if (this.recognition) {
                 try { this.recognition.stop(); } catch(e) {}
             }
@@ -399,7 +399,7 @@ const CallManager = {
         const modal = document.getElementById('modal-call-notes');
         const content = document.getElementById('call-notes-content');
         if (modal) modal.style.display = 'flex';
-        if (content) content.innerHTML = '<p style="color:#64748b;">Generating AI meeting notes &amp; extracting action items... ⏳</p>';
+        if (content) content.innerHTML = '<p style="color:#64748b;">Generating AI meeting notes &amp; extracting action items...</p>';
 
         let transcript = this.transcriptLines.join('\n');
         if (!transcript.trim()) {
@@ -428,14 +428,14 @@ const CallManager = {
                     </div>
 
                     <div style="margin-bottom: 1rem; background: #f8fafc; padding: 10px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                        <h4 style="margin: 0 0 0.4rem; color: #059669; font-size: 0.9rem;">🎯 Key Strategic Decisions</h4>
+                        <h4 style="margin: 0 0 0.4rem; color: #059669; font-size: 0.9rem;">Key Strategic Decisions</h4>
                         <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.88rem; color: #334155;">
                             ${(data.keyDecisions || []).map(d => `<li>${escapeHtml(d)}</li>`).join('')}
                         </ul>
                     </div>
 
                     <div style="background: #f8fafc; padding: 10px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                        <h4 style="margin: 0 0 0.4rem; color: #d97706; font-size: 0.9rem;">📋 Extracted Action Items</h4>
+                        <h4 style="margin: 0 0 0.4rem; color: #d97706; font-size: 0.9rem;">Extracted Action Items</h4>
                         <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.88rem; color: #334155;">
                             ${(data.actionItems || []).map(a => `<li>${escapeHtml(a)}</li>`).join('')}
                         </ul>

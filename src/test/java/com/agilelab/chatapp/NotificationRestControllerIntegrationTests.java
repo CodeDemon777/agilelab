@@ -88,3 +88,4 @@ class NotificationRestControllerIntegrationTests {
         assertEquals(1, bobUnread, "Bob's notification must not be marked read by Alice");
     }
 }
+
